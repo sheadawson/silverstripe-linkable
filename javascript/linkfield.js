@@ -11,6 +11,8 @@ jQuery.entwine("linkfield", function($) {
 			var url = this.parents('form').attr('action') + '/field/' + this.attr('name') + '/LinkFormHTML';
 			if(self.val().length){
 				url = url + '?LinkID=' + self.val();
+			}else{
+				url = url + '?LinkID=0';
 			}
 			this.setURL(url);
 
@@ -66,6 +68,16 @@ jQuery.entwine("linkfield", function($) {
 	$(".linkfield-button").entwine({
 		onclick: function() {
 			this.siblings('input.link').showDialog();
+			return false;
+		},
+	});
+
+	$(".linkfield-remove-button").entwine({
+		onclick: function() {
+			var url = this.parents('form').attr('action') + '/field/' + this.siblings('input:first').prop('name') + '/doRemoveLink';
+			var holder = this.parents('.field:first');
+			this.parents('.middleColumn:first').html("<img src='framework/images/network-save.gif' />");
+			holder.load(url);
 			return false;
 		},
 	});

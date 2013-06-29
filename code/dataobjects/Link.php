@@ -1,4 +1,9 @@
 <?php
+/**
+ * Link
+ * @package silverstripe-linkable
+ * @author shea@silverstripe.com.au
+ **/
 class Link extends DataObject{
 
 	public static $db = array(
@@ -13,6 +18,17 @@ class Link extends DataObject{
 		'SiteTree' => 'SiteTree'
 	);
 
+	public static $summary_fields = array(
+		'Title',
+		'LinkType',
+		'LinkURL'
+	);
+
+	/**
+	 * A map of object types that can be linked to
+	 * Custom dataobjects can be added to this
+	 * @var array
+	 **/
 	public static $types = array(
 		'URL' => 'External URL',
 		'File' => 'File on this website',
@@ -23,6 +39,7 @@ class Link extends DataObject{
 	public function getCMSFields(){
 		$fields = parent::getCMSFields()->first()->Tabs()->First()->Fields();
 		$fields->replaceField('Type', DropdownField::create('Type', 'Link Type', self::$types)->setEmptyString(' '));
+		$fields->replaceField('File', TreeDropdownField::create('File', 'File', 'File'));
 		$fields->replaceField('SiteTreeID', TreeDropdownField::create('SiteTreeID', 'Page', 'SiteTree'));
 		
 		$fields->push(CheckboxField::create('OpenInNewWindow', 'Open link in a new window'));
@@ -37,6 +54,10 @@ class Link extends DataObject{
 	}
 
 
+	/**
+	 * Renders an HTML anchor tag for this link
+	 * @return String
+	 **/
 	public function forTemplate(){
 		$url = $this->getLinkURL();
 		$title = $this->Title ? $this->Title : $url; 
@@ -45,13 +66,48 @@ class Link extends DataObject{
 	}
 
 
+	/**
+	 * Works out what the URL for this link should be based on it's Type
+	 * @return String
+	 **/
 	public function getLinkURL(){
+		if(!$this->ID) return;
 		if($this->Type == 'URL'){
 			return $this->URL;
 		}else{
-			if($this->dbObject($this->Type)){
-				return $this->dbObject($this->Type)->Link();	
+			if($component = $this->getComponent($this->Type)){
+				if($component->hasMethod('Link')){
+					return $component->Link();	
+				}else{
+					return "Please implement a Link() method on your dataobject \"$this->Type\"";
+				}
 			}
 		}
+	}
+
+
+	/**
+	 * Gets the description label of this links type
+	 * @return String
+	 **/
+	public function getLinkType(){
+		return self::$types[$this->Type];
+	}
+
+
+	/**
+	 * Validate
+	 * @return ValidationResult
+	 **/
+	protected function validate(){
+		$valid = true;
+		$message = null;
+		if($this->Type == 'URL' && $this->URL ==''){
+			$valid = false;
+			$message = 'You must enter a URL for a link type of "URL"';
+		}
+		$result = ValidationResult::create($valid, $message);
+		$this->extend('validate', $result);
+		return $result;
 	}
 }

@@ -15,7 +15,8 @@ class LinkField extends TextField{
 	public static $allowed_actions = array(
 		'LinkForm',
 		'LinkFormHTML',
-		'doSaveLink'
+		'doSaveLink',
+		'doRemoveLink'
 	);
 
 
@@ -24,6 +25,7 @@ class LinkField extends TextField{
 		return parent::Field();
 	}
 
+
 	/**
 	 * The LinkForm for the dialog window
 	 *
@@ -31,6 +33,7 @@ class LinkField extends TextField{
 	 **/
 	public function LinkForm(){
 		$link = $this->getLinkObject();
+
 		$action = FormAction::create('doSaveLink', 'Save')->setUseButtonTag('true');
 
 		if(!$this->isFrontend){
@@ -63,9 +66,25 @@ class LinkField extends TextField{
 	public function doSaveLink($data, $form){
 		$link = $this->getLinkObject() ? $this->getLinkObject() : Link::create();
 		$link->update($data);
-		$link->write();
+		try {
+			$link->write();	
+		} catch (ValidationException $e) {
+			$form->sessionMessage($e->getMessage(), 'bad');
+			return $form->forTemplate();
+		}
 		$this->setValue($link->ID);
 		$this->setForm($form);
+		return $this->FieldHolder();
+	}
+
+
+	/**
+	 * Delete link action - TODO
+	 *
+	 * @return String
+	 **/
+	public function doRemoveLink(){
+		$this->setValue('');
 		return $this->FieldHolder();
 	}
 
@@ -76,8 +95,14 @@ class LinkField extends TextField{
 	 * @return Link
 	 **/
 	public function getLinkObject(){
+		$requestID = Controller::curr()->request->requestVar('LinkID');
+		
+		if($requestID == '0'){
+			return;
+		}
+
 		if(!$this->linkObject){
-			$id = $this->Value() ? $this->Value() : Controller::curr()->request->requestVar('LinkID');
+			$id = $this->Value() ? $this->Value() : $requestID;
 			if((int)$id){
 				$this->linkObject = Link::get()->byID($id);
 			}		
