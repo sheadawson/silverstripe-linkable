@@ -105,6 +105,11 @@ class Link extends DataObject{
 		if($this->Type == 'URL' && $this->URL ==''){
 			$valid = false;
 			$message = 'You must enter a URL for a link type of "URL"';
+		}else{
+			if(!$this->getComponent($this->Type)->exists()){
+				$valid = false;
+				$message = "Please select a {$this->Type} object to link to";
+			}
 		}
 		$result = ValidationResult::create($valid, $message);
 		$this->extend('validate', $result);
