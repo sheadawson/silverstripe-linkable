@@ -1,8 +1,11 @@
 <?php
+
 /**
  * Link
+ *
  * @package silverstripe-linkable
- * @author shea@silverstripe.com.au
+ * @license BSD License http://www.silverstripe.org/bsd-license
+ * @author <shea@silverstripe.com.au>
  **/
 class Link extends DataObject{
 
@@ -102,9 +105,14 @@ class Link extends DataObject{
 	protected function validate(){
 		$valid = true;
 		$message = null;
-		if($this->Type == 'URL' && $this->URL ==''){
-			$valid = false;
-			$message = 'You must enter a URL for a link type of "URL"';
+		if($this->Type == 'URL'){
+			if($this->URL ==''){
+				$valid = false;
+				$message = 'You must enter a URL for a link type of "URL"';
+			}elseif(!filter_var($this->URL, FILTER_VALIDATE_URL)){
+				$valid = false;
+				$message = 'Please enter a valid URL and be sure to include http://';
+			}
 		}else{
 			if(!$this->getComponent($this->Type)->exists()){
 				$valid = false;
@@ -115,4 +123,7 @@ class Link extends DataObject{
 		$this->extend('validate', $result);
 		return $result;
 	}
+
+
+
 }
