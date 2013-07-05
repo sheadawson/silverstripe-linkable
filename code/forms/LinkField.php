@@ -1,4 +1,12 @@
 <?php
+
+/**
+ * LinkField
+ *
+ * @package silverstripe-linkable
+ * @license BSD License http://www.silverstripe.org/bsd-license
+ * @author <shea@silverstripe.com.au>
+ **/
 class LinkField extends TextField{
 
 	/**
@@ -21,7 +29,7 @@ class LinkField extends TextField{
 
 
 	public function Field($properties = array()){
-		Requirements::javascript('linkfield/javascript/linkfield.js');
+		Requirements::javascript(LINKABLE_PATH . '/javascript/linkfield.js');
 		return parent::Field();
 	}
 

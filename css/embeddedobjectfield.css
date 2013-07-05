@@ -1,0 +1,30 @@
+div.embeddedObjectUrl {
+	max-width: 512px;
+}
+
+div.embeddedObjectUrl input.text {
+	max-width: 400px;
+}
+
+input.embeddedObjectLoad {
+	float: right;
+}
+
+.dimensions {
+
+}
+
+.dimensions .widthHeightField {
+}
+
+.dimensions .widthHeightField .fieldholder-small {
+	width: 200px;
+}
+
+.embeddedObjectProperties div.ss-upload {
+	margin-left: -185px;
+}
+
+.embedThumb {
+	padding: 10px 0px;
+}
