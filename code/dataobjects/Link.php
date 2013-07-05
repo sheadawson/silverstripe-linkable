@@ -64,7 +64,7 @@ class Link extends DataObject{
 	public function forTemplate(){
 		$url = $this->getLinkURL();
 		$title = $this->Title ? $this->Title : $url; 
-		$target = $this->OpenInNewWindow ? "target='_blank'" : '';
+		$target = $this->getTargetAttr();
 		return "<a href='$url' $target>$title</a>";
 	}
 
@@ -86,6 +86,15 @@ class Link extends DataObject{
 				}
 			}
 		}
+	}
+
+
+	/**
+     * Gets the html target attribute for the anchor tag
+     * @return String
+     **/
+    public function getTargetAttr(){
+        return $this->OpenInNewWindow ? "target='_blank'" : '';
 	}
 
 
