@@ -1,0 +1,24 @@
+{
+	"name": "sheadawson/silverstripe-linkfield",
+	"type": "silverstripe-module",
+	"description": "A couple of handy form fields and objects for managing external and internal links on DataObjects",
+	"license": "BSD-3-Clause",
+	"keywords": ["silverstripe", "cms"],
+	"authors": [
+		{
+			"name": "Shea Dawson",
+			"homepage": "http://github.com/sheadawson"
+		},
+		{
+			"name": "Marcus Nyeholt",
+			"homepage": "http://github.com/nyeholt"
+		}
+	],
+	"require": {
+		"php": ">=5.3.2",
+		"silverstripe/framework": "3.0.*",
+		"silverstripe/cms": "3.0.*",
+		"silverstripe/cms": "3.0.*",
+		"silverstripe/display-logic"
+	}
+}
