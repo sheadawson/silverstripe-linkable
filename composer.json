@@ -1,17 +1,18 @@
 {
-	"name": "sheadawson/silverstripe-linkfield",
+	"name": "sheadawson/silverstripe-linkable",
 	"type": "silverstripe-module",
 	"description": "A couple of handy form fields and objects for managing external and internal links on DataObjects",
 	"license": "BSD-3-Clause",
 	"keywords": ["silverstripe", "cms"],
+	"homepage": "http://github.com/sheadawson/silverstripe-linkable",
 	"authors": [
 		{
 			"name": "Shea Dawson",
-			"homepage": "http://github.com/sheadawson"
+			"email": "shea@silverstripe.com.au"
 		},
 		{
 			"name": "Marcus Nyeholt",
-			"homepage": "http://github.com/nyeholt"
+			"email": "marcus@silverstripe.com.au"
 		}
 	],
 	"require": {
@@ -19,5 +20,8 @@
 		"silverstripe/framework": "3.0.*",
 		"silverstripe/cms": "3.0.*",
 		"silverstripe/display-logic": "dev-master"
+	},
+	"extra": {
+		"installer-name": "linkable"
 	}
 }
