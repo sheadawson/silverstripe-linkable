@@ -41,14 +41,15 @@ class Link extends DataObject{
 
 	public function getCMSFields(){
 		$fields = parent::getCMSFields()->first()->Tabs()->First()->Fields();
+		$fields->dataFieldByName('Title')->setRightTitle('Optional. Will be auto-generated from link if left blank');
 		$fields->replaceField('Type', DropdownField::create('Type', 'Link Type', self::$types)->setEmptyString(' '));
-		$fields->replaceField('File', TreeDropdownField::create('File', 'File', 'File'));
+		$fields->replaceField('File', TreeDropdownField::create('FileID', 'File', 'File'));
 		$fields->replaceField('SiteTreeID', TreeDropdownField::create('SiteTreeID', 'Page', 'SiteTree'));
 		
 		$fields->push(CheckboxField::create('OpenInNewWindow', 'Open link in a new window'));
 		
 		$fields->fieldByName('URL')->displayIf("Type")->isEqualTo("URL");
-		$fields->fieldByName('File')->displayIf("Type")->isEqualTo("File");
+		$fields->fieldByName('FileID')->displayIf("Type")->isEqualTo("File");
 		$fields->fieldByName('SiteTreeID')->displayIf("Type")->isEqualTo("SiteTree");
 
 		$this->extend('updateCMSFields', $fields);
@@ -58,12 +59,41 @@ class Link extends DataObject{
 
 
 	/**
+	 * If the title is empty, set it to getLinkURL()
+	 * @return String
+	 **/
+	public function onAfterWrite(){
+		parent::onAfterWrite();
+		if(!$this->Title){
+			if($this->Type == 'URL'){
+				$this->Title = $this->URL;
+			}elseif($this->Type == 'SiteTree'){
+				$this->Title = $this->SiteTree()->MenuTitle;
+			}else{
+				if($component = $this->getComponent($this->Type)){
+					$this->Title = $component->Title;
+				}
+			}
+
+			if(!$this->Title){
+				$this->Title = 'Link-' . $this->ID;
+			}
+
+			$this->write();
+		}
+
+		
+
+	}
+
+
+	/**
 	 * Renders an HTML anchor tag for this link
 	 * @return String
 	 **/
 	public function forTemplate(){
 		$url = $this->getLinkURL();
-		$title = $this->Title ? $this->Title : $url; 
+		$title = $this->Title ? $this->Title : $url; // legacy
 		$target = $this->getTargetAttr();
 		return "<a href='$url' $target>$title</a>";
 	}
