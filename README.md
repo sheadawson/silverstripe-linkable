@@ -2,7 +2,7 @@
 
 ## Requirements
 
-* SilverStripe 3.0.*
+* SilverStripe 3.*
 * [Display Logic](https://github.com/unclecheese/silverstripe-display-logic)
 
 ## Maintainers
