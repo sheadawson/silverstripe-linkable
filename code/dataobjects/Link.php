@@ -40,7 +40,7 @@ class Link extends DataObject{
 
 
 	public function getCMSFields(){
-		$fields = parent::getCMSFields()->first()->Tabs()->First()->Fields();
+		$fields = parent::getCMSFields();//->first()->Tabs()->First()->Fields();
 		$fields->dataFieldByName('Title')->setRightTitle('Optional. Will be auto-generated from link if left blank');
 		$fields->replaceField('Type', DropdownField::create('Type', 'Link Type', self::$types)->setEmptyString(' '));
 		$fields->replaceField('File', TreeDropdownField::create('FileID', 'File', 'File'));
@@ -48,9 +48,9 @@ class Link extends DataObject{
 		
 		$fields->push(CheckboxField::create('OpenInNewWindow', 'Open link in a new window'));
 		
-		$fields->fieldByName('URL')->displayIf("Type")->isEqualTo("URL");
-		$fields->fieldByName('FileID')->displayIf("Type")->isEqualTo("File");
-		$fields->fieldByName('SiteTreeID')->displayIf("Type")->isEqualTo("SiteTree");
+		$fields->dataFieldByName('URL')->displayIf("Type")->isEqualTo("URL");
+		$fields->dataFieldByName('FileID')->displayIf("Type")->isEqualTo("File");
+		$fields->dataFieldByName('SiteTreeID')->displayIf("Type")->isEqualTo("SiteTree");
 
 		$this->extend('updateCMSFields', $fields);
 
@@ -108,7 +108,7 @@ class Link extends DataObject{
 		if($this->Type == 'URL'){
 			return $this->URL;
 		}else{
-			if($component = $this->getComponent($this->Type)){
+			if($this->Type && $component = $this->getComponent($this->Type)){
 				if($component->hasMethod('Link')){
 					return $component->Link();	
 				}else{
@@ -133,7 +133,7 @@ class Link extends DataObject{
 	 * @return String
 	 **/
 	public function getLinkType(){
-		return self::$types[$this->Type];
+		return isset(self::$types[$this->Type]) ? self::$types[$this->Type] : null;
 	}
 
 
