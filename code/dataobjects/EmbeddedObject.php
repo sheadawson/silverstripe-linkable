@@ -8,7 +8,7 @@
  * @author <marcus@silverstripe.com.au>
  **/
 class EmbeddedObject extends DataObject {
-	public static $db = array(
+	private static $db = array(
 		'Title'				=> 'Varchar(255)',
 		'Type'				=> 'Varchar',
 		'SourceURL'			=> 'Varchar(255)',

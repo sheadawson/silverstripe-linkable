@@ -9,19 +9,19 @@
  **/
 class Link extends DataObject{
 
-	public static $db = array(
+	private static $db = array(
 		'Title' => 'Varchar(255)',
 		'Type' => 'Varchar',
 		'URL' => 'Varchar(255)',
 		'OpenInNewWindow' => 'Boolean'
 	);
 
-	public static $has_one = array(
+	private static $has_one = array(
 		'File' => 'File',
 		'SiteTree' => 'SiteTree'
 	);
 
-	public static $summary_fields = array(
+	private static $summary_fields = array(
 		'Title',
 		'LinkType',
 		'LinkURL'
@@ -32,7 +32,7 @@ class Link extends DataObject{
 	 * Custom dataobjects can be added to this
 	 * @var array
 	 **/
-	public static $types = array(
+	private static $types = array(
 		'URL' => 'External URL',
 		'File' => 'File on this website',
 		'SiteTree' => 'Page on this website'
@@ -40,13 +40,14 @@ class Link extends DataObject{
 
 
 	public function getCMSFields(){
-		$fields = parent::getCMSFields();//->first()->Tabs()->First()->Fields();
+		$fields = parent::getCMSFields();
 		$fields->dataFieldByName('Title')->setRightTitle('Optional. Will be auto-generated from link if left blank');
-		$fields->replaceField('Type', DropdownField::create('Type', 'Link Type', self::$types)->setEmptyString(' '));
-		$fields->replaceField('File', TreeDropdownField::create('FileID', 'File', 'File'));
-		$fields->replaceField('SiteTreeID', TreeDropdownField::create('SiteTreeID', 'Page', 'SiteTree'));
+		$fields->replaceField('Type', DropdownField::create('Type', 'Link Type', $this->config()->get('types'))->setEmptyString(' '), 'OpenInNewWindow');
+		$fields->replaceField('File', TreeDropdownField::create('FileID', 'File', 'File'), 'OpenInNewWindow');
+		$fields->replaceField('SiteTreeID', TreeDropdownField::create('SiteTreeID', 'Page', 'SiteTree'), 'OpenInNewWindow');
 		
-		$fields->push(CheckboxField::create('OpenInNewWindow', 'Open link in a new window'));
+		$fields->addFieldToTab('Root.Main', $newWindow = CheckboxField::create('OpenInNewWindow', 'Open link in a new window'));
+		$newWindow->displayIf('Type')->isNotEmpty();
 		
 		$fields->dataFieldByName('URL')->displayIf("Type")->isEqualTo("URL");
 		$fields->dataFieldByName('FileID')->displayIf("Type")->isEqualTo("File");
@@ -133,7 +134,8 @@ class Link extends DataObject{
 	 * @return String
 	 **/
 	public function getLinkType(){
-		return isset(self::$types[$this->Type]) ? self::$types[$this->Type] : null;
+		$types = $this->config()->get('types');
+		return isset($types[$this->Type]) ? $types[$this->Type] : null;
 	}
 
 
