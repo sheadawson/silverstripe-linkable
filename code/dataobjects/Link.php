@@ -150,7 +150,7 @@ class Link extends DataObject{
 			if($this->URL ==''){
 				$valid = false;
 				$message = 'You must enter a URL for a link type of "URL"';
-			}elseif(!filter_var($this->URL, FILTER_VALIDATE_URL)){
+			}elseif(substr($this->URL, 0, 1) !='#' && !filter_var($this->URL, FILTER_VALIDATE_URL)){
 				$valid = false;
 				$message = 'Please enter a valid URL and be sure to include http://';
 			}
