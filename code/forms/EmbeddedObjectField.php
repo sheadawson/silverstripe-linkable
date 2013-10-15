@@ -86,7 +86,7 @@ class EmbeddedObjectField extends FormField {
 			}
 		}
 		
-		$props = array_keys(EmbeddedObject::$db);
+		$props = array_keys(Config::inst()->get('EmbeddedObject', 'db'));
 		foreach ($props as $prop) {
 			$this->object->$prop = isset($val[strtolower($prop)]) ? $val[strtolower($prop)] : null;
 		}
