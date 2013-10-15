@@ -9,6 +9,10 @@
  **/
 class EmbeddedObjectField extends FormField {
 	
+	private static $allowed_actions = array(
+		'update'
+	);
+
 	protected $object;
 	
 	protected $message;
