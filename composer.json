@@ -3,7 +3,7 @@
 	"type": "silverstripe-module",
 	"description": "A couple of handy form fields and objects for managing external and internal links on DataObjects",
 	"license": "BSD-3-Clause",
-	"keywords": ["silverstripe", "cms"],
+	"keywords": ["silverstripe", "cms", "link"],
 	"homepage": "http://github.com/sheadawson/silverstripe-linkable",
 	"authors": [
 		{
