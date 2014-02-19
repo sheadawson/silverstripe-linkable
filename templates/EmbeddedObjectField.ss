@@ -1,20 +1,20 @@
-<% if isReadonly %>
+<% if $isReadonly %>
 	<span id="$ID"
-	      <% if extraClass %>class="$extraClass"<% end_if %>
+	      <% if $extraClass %>class="$extraClass"<% end_if %>
 	      <% if $Description %>title="$Description"<% end_if %>>
 		$Value
 	</span>
 <% else %>
 	<div class="embeddedObjectUrl">
-		<input type='button' class="embeddedObjectLoad ss-ui-button ss-ui-button-small" data-href="$Link(update)" value='<% _t('EmbeddedObject.INSPECT','Inspect') %>' />		
+		<input type='button' class="embeddedObjectLoad ss-ui-button ss-ui-button-small" data-href="$Link(update)" value='<% _t('Linkable.INSPECT','Inspect') %>' />
 		$SourceURL.SmallFieldHolder
 	</div>
 
-<% if Message %>
+<% if $Message %>
 <div class="errorMessage"><p>$Message</p></div>
 <% end_if %>
 
-	<% if Description %>
+	<% if $Description %>
 	<div class="embedThumb">
 	$ThumbImage
 	</div>

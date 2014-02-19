@@ -1,0 +1,25 @@
+de:
+  Linkable:
+    EDIT: bearbeiten
+    REMOVE: entfernen
+    ADDLINK: "Link hinzufügen"
+    EDITLINK: "Link bearbeiten"
+    TITLE: Titel
+    SAVE: Speichern
+    DESCRIPTION: Beschreibung
+    WIDTH: Breite
+    HEIGHT: Höhe
+    SOURCEURL: "Ursprungs-URL"
+    INSPECT: sichten
+    CSSCLASS: "CSS Klasse"
+    LINKTYPE: "Link Typ"
+    FILE: Datei
+    PAGE: Seite
+    TYPEURL: "Externe URL"
+    TYPEFILE: "Datei auf dieser Website"
+    TYPESITETREE: "Seite von dieser Website"
+    VALIDATIONERROR_EMPTYURL: "Sie müssen eine URL angeben"
+    VALIDATIONERROR_VALIDURL: "Bitte geben Sie eine gültige URL ein, mit http://"
+    VALIDATIONERROR_OBJECT: "Bitte wählen Sie ein {value} Objekt, um es zu verlinken"
+    OPTIONALTITLE: "Optional. Es wird der Link genommen, wenn kein Wert angegeben wird"
+    OPENINNEWWINDOW: "In neuem Fenster öffnen"
