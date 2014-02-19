@@ -42,7 +42,7 @@ class LinkField extends TextField{
 	public function LinkForm(){
 		$link = $this->getLinkObject();
 
-		$action = FormAction::create('doSaveLink', 'Save')->setUseButtonTag('true');
+		$action = FormAction::create('doSaveLink', _t('Linkable.SAVE', 'Save'))->setUseButtonTag('true');
 
 		if(!$this->isFrontend){
 			$action->addExtraClass('ss-ui-action-constructive')->setAttribute('data-icon', 'accept');
@@ -50,8 +50,8 @@ class LinkField extends TextField{
 
 		$fields = singleton('Link')->getCMSFields();
 		
-		$title = $link ? 'Edit Link' : 'Add Link';
-		$fields->insertBefore(HeaderField::create('LinkHeader', $title), 'Title');
+		$title = $link ? _t('Linkable.EDITLINK', 'Edit Link') : _t('Linkable.ADDLINK', 'Add Link');
+		$fields->insertBefore(HeaderField::create('LinkHeader', $title), _t('Linkable.TITLE', 'Title'));
 		$actions = FieldList::create($action);
 		$form = Form::create($this, 'LinkForm', $fields, $actions);
 

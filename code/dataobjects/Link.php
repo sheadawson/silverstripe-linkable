@@ -41,12 +41,19 @@ class Link extends DataObject{
 
 	public function getCMSFields(){
 		$fields = parent::getCMSFields();
-		$fields->dataFieldByName('Title')->setRightTitle('Optional. Will be auto-generated from link if left blank');
-		$fields->replaceField('Type', DropdownField::create('Type', 'Link Type', $this->config()->get('types'))->setEmptyString(' '), 'OpenInNewWindow');
-		$fields->replaceField('File', TreeDropdownField::create('FileID', 'File', 'File'), 'OpenInNewWindow');
-		$fields->replaceField('SiteTreeID', TreeDropdownField::create('SiteTreeID', 'Page', 'SiteTree'), 'OpenInNewWindow');
+
+        $types = $this->config()->get('types');
+        $i18nTypes = array();
+        foreach ($types as $key => $label) {
+            $i18nTypes[$key] = _t('Linkable.TYPE'.strtoupper($key), $label);
+        }
+
+		$fields->dataFieldByName('Title')->setTitle(_t('Linkable.TITLE', 'Title'))->setRightTitle(_t('Linkable.OPTIONALTITLE', 'Optional. Will be auto-generated from link if left blank'));
+		$fields->replaceField('Type', DropdownField::create('Type', _t('Linkable.LINKTYPE', 'Link Type'), $i18nTypes)->setEmptyString(' '), 'OpenInNewWindow');
+		$fields->replaceField('File', TreeDropdownField::create('FileID', _t('Linkable.FILE', 'File'), 'File'), 'OpenInNewWindow');
+		$fields->replaceField('SiteTreeID', TreeDropdownField::create('SiteTreeID', _t('Linkable.PAGE', 'Page'), 'SiteTree'), 'OpenInNewWindow');
 		
-		$fields->addFieldToTab('Root.Main', $newWindow = CheckboxField::create('OpenInNewWindow', 'Open link in a new window'));
+		$fields->addFieldToTab('Root.Main', $newWindow = CheckboxField::create('OpenInNewWindow', _t('Linkable.OPENINNEWWINDOW', 'Open link in a new window')));
 		$newWindow->displayIf('Type')->isNotEmpty();
 		
 		$fields->dataFieldByName('URL')->displayIf("Type")->isEqualTo("URL");
@@ -149,15 +156,15 @@ class Link extends DataObject{
 		if($this->Type == 'URL'){
 			if($this->URL ==''){
 				$valid = false;
-				$message = 'You must enter a URL for a link type of "URL"';
+				$message = _t('Linkable.VALIDATIONERROR_EMPTYURL', 'You must enter a URL for a link type of "URL"');
 			}elseif(substr($this->URL, 0, 1) !='#' && !filter_var($this->URL, FILTER_VALIDATE_URL)){
 				$valid = false;
-				$message = 'Please enter a valid URL and be sure to include http://';
+				$message = _t('Linkable.VALIDATIONERROR_VALIDURL', 'Please enter a valid URL and be sure to include http://');
 			}
 		}else{
 			if(!$this->getComponent($this->Type)->exists()){
 				$valid = false;
-				$message = "Please select a {$this->Type} object to link to";
+				$message = _t('Linkable.VALIDATIONERROR_OBJECT', "Please select a {value} object to link to", array('value' => $this->Type));
 			}
 		}
 		$result = ValidationResult::create($valid, $message);

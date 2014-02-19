@@ -35,24 +35,24 @@ class EmbeddedObjectField extends FormField {
 		
 		if ($this->object && $this->object->ID) {
 			// $properties['SourceURL'] = ReadonlyField::create($this->getName() . '[sourceurl]', 'Source URL');
-			$properties['SourceURL'] = TextField::create($this->getName() . '[sourceurl]', 'Source URL');
+			$properties['SourceURL'] = TextField::create($this->getName() . '[sourceurl]', _t('Linkable.SOURCEURL', 'Source URL'));
 
 			if (strlen($this->object->SourceURL)) {
-				$properties['ObjectTitle'] = TextField::create($this->getName() . '[title]', 'Title');
+				$properties['ObjectTitle'] = TextField::create($this->getName() . '[title]', _t('Linkable.TITLE', 'Title'));
 
-				$properties['Width'] = TextField::create($this->getName() . '[width]', 'Width');
-				$properties['Height'] = TextField::create($this->getName() . '[height]', 'Height');
+				$properties['Width'] = TextField::create($this->getName() . '[width]', _t('Linkable.WIDTH', 'Width'));
+				$properties['Height'] = TextField::create($this->getName() . '[height]', _t('Linkable.HEIGHT', 'Height'));
 
 				$properties['ThumbURL'] = HiddenField::create($this->getName() . '[thumburl]', '');
 				$properties['Type'] = HiddenField::create($this->getName() . '[type]', '');
 				$properties['EmbedHTML'] = HiddenField::create($this->getName() . '[embedhtml]', '');
 
 				//HtmlEditorConfig::set_active('simple'); setting the simple config seems to add an additional html editor!?
-				$properties['Description'] = HTMLEditorField::create($this->getName() . '[description]', 'Description');
+				$properties['Description'] = HTMLEditorField::create($this->getName() . '[description]', _t('Linkable.DESCRIPTION', 'Description'));
 				//HtmlEditorConfig::set_active('default');
 				$properties['Description']->setRows(8);
 				
-				$properties['ExtraClass'] = TextField::create($this->getName() . '[extraclass]', 'CSS class');
+				$properties['ExtraClass'] = TextField::create($this->getName() . '[extraclass]', _t('Linkable.CSSCLASS', 'CSS class'));
 
 				foreach ($properties as $key => $field) {
 					if ($key == 'ObjectTitle') {
@@ -66,7 +66,7 @@ class EmbeddedObjectField extends FormField {
 				}
 			}
 		} else {
-			$properties['SourceURL'] = TextField::create($this->getName() . '[sourceurl]', 'Source URL');
+			$properties['SourceURL'] = TextField::create($this->getName() . '[sourceurl]', _t('Linkable.SOURCEURL', 'Source URL'));
 		}
 
 		$field = parent::FieldHolder($properties);
