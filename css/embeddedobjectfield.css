@@ -10,21 +10,42 @@ input.embeddedObjectLoad {
 	float: right;
 }
 
-.dimensions {
-
-}
-
-.dimensions .widthHeightField {
-}
-
-.dimensions .widthHeightField .fieldholder-small {
-	width: 200px;
-}
-
 .embeddedObjectProperties div.ss-upload {
 	margin-left: -185px;
 }
 
 .embedThumb {
 	padding: 10px 0px;
+}
+
+.embedThumb img{
+	max-width: 482px;
+	height: auto;
+}
+
+.field.embeddedobject .middleColumn{
+	background: #fff;
+	padding: 20px 20px 0;
+	border: 1px solid #eee;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	display: inline-block;
+	margin-left: 0;
+	min-width: 482px;
+}
+
+.embeddedObjectProperties .fieldholder-small{
+	margin-bottom: 20px;
+}
+
+.embeddedObjectProperties label{
+	display: block;
+}
+
+.embeddedObjectProperties input{
+	display: block;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;    
+	box-sizing: border-box;         
 }
