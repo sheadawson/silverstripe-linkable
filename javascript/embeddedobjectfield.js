@@ -8,7 +8,7 @@
 			var container = $(this).parents('div.embeddedobject');
 			var button = this;
 			var buttonText = button.val();
-			button.val('Loading...').prop('disabled', 'disabled');
+			button.val('Loading').prop('disabled', 'disabled');
 			
 			$.post($(this).data('href'), params, function (data) {
 				button.val(buttonText).removeAttr('disabled');

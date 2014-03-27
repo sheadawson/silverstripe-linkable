@@ -34,29 +34,23 @@ class EmbeddedObjectField extends FormField {
 		Requirements::javascript(LINKABLE_PATH . '/javascript/embeddedobjectfield.js');
 		
 		if ($this->object && $this->object->ID) {
-			// $properties['SourceURL'] = ReadonlyField::create($this->getName() . '[sourceurl]', 'Source URL');
-			$properties['SourceURL'] = TextField::create($this->getName() . '[sourceurl]', _t('Linkable.SOURCEURL', 'Source URL'));
+			$properties['SourceURL'] = TextField::create($this->getName() . '[sourceurl]', '')->setAttribute('placeholder', _t('Linkable.SOURCEURL', 'Source URL'));
 
 			if (strlen($this->object->SourceURL)) {
 				$properties['ObjectTitle'] = TextField::create($this->getName() . '[title]', _t('Linkable.TITLE', 'Title'));
-
 				$properties['Width'] = TextField::create($this->getName() . '[width]', _t('Linkable.WIDTH', 'Width'));
 				$properties['Height'] = TextField::create($this->getName() . '[height]', _t('Linkable.HEIGHT', 'Height'));
-
 				$properties['ThumbURL'] = HiddenField::create($this->getName() . '[thumburl]', '');
 				$properties['Type'] = HiddenField::create($this->getName() . '[type]', '');
 				$properties['EmbedHTML'] = HiddenField::create($this->getName() . '[embedhtml]', '');
-
-				//HtmlEditorConfig::set_active('simple'); setting the simple config seems to add an additional html editor!?
-				$properties['Description'] = HTMLEditorField::create($this->getName() . '[description]', _t('Linkable.DESCRIPTION', 'Description'));
-				//HtmlEditorConfig::set_active('default');
-				$properties['Description']->setRows(8);
-				
+				$properties['ObjectDescription'] = TextAreaField::create($this->getName() . '[description]', _t('Linkable.DESCRIPTION', 'Description'));
 				$properties['ExtraClass'] = TextField::create($this->getName() . '[extraclass]', _t('Linkable.CSSCLASS', 'CSS class'));
 
 				foreach ($properties as $key => $field) {
 					if ($key == 'ObjectTitle') {
 						$key = 'Title';
+					}elseif ($key == 'ObjectDescription') {
+						$key = 'Description';
 					}
 					$field->setValue($this->object->$key);
 				}
@@ -66,7 +60,7 @@ class EmbeddedObjectField extends FormField {
 				}
 			}
 		} else {
-			$properties['SourceURL'] = TextField::create($this->getName() . '[sourceurl]', _t('Linkable.SOURCEURL', 'Source URL'));
+			$properties['SourceURL'] = TextField::create($this->getName() . '[sourceurl]','')->setAttribute('placeholder', _t('Linkable.SOURCEURL', 'Source URL'));
 		}
 
 		$field = parent::FieldHolder($properties);
@@ -76,7 +70,7 @@ class EmbeddedObjectField extends FormField {
 	public function saveInto(DataObjectInterface $record) {
 		$val = $this->Value();
 		
-		if (!$this->object) {
+ 		if (!$this->object) {
 			$this->object = EmbeddedObject::create();
 		}
 		
@@ -88,7 +82,7 @@ class EmbeddedObjectField extends FormField {
 		
 		$props = array_keys(Config::inst()->get('EmbeddedObject', 'db'));
 		foreach ($props as $prop) {
-			$this->object->$prop = isset($val[strtolower($prop)]) ? $val[strtolower($prop)] : null;
+			$this->object->$prop = isset($val[strtolower($prop)]) ? $val[strtolower($prop)] : null;	
 		}
 
 		$this->object->write();
@@ -126,7 +120,5 @@ class EmbeddedObjectField extends FormField {
 			$this->object = null;
 			return $this->FieldHolder();
 		}
-
-		
 	}
 }

@@ -14,7 +14,7 @@
 <div class="errorMessage"><p>$Message</p></div>
 <% end_if %>
 
-	<% if $Description %>
+	<% if $Title %>
 	<div class="embedThumb">
 	$ThumbImage
 	</div>
@@ -31,7 +31,7 @@
 			</div>
 		</div>
 		
-		$Description.SmallFieldHolder
+		$ObjectDescription.SmallFieldHolder
 
 		$ExtraClass.SmallFieldHolder
 		
