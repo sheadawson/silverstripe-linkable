@@ -15,7 +15,7 @@ This module contains a couple of handy FormFields / DataObjects for managing ext
 
 ## Link / LinkField
 
-A Link Object can be linked to an External URL or, an internal Page or File in the SilverStripe instance. A DataObject, such as a Page can have many Link objects managed with a grid field, or one Link managed with LinkField. 
+A Link Object can be linked to a URL or, an internal Page or File in the SilverStripe instance. A DataObject, such as a Page can have many Link objects managed with a grid field, or one Link managed with LinkField. 
 
 ### Example usage
 
