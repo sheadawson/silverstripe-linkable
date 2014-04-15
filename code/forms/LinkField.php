@@ -48,7 +48,13 @@ class LinkField extends TextField{
 			$action->addExtraClass('ss-ui-action-constructive')->setAttribute('data-icon', 'accept');
 		}
 
-		$fields = singleton('Link')->getCMSFields();
+		$link = null;
+		if($linkID = (int)$this->request->getVar('LinkID')){
+			$link = Link::get()->byID($linkID);
+		}
+		$link = $link ? $link : singleton('Link');
+
+		$fields = $link->getCMSFields();
 		
 		$title = $link ? _t('Linkable.EDITLINK', 'Edit Link') : _t('Linkable.ADDLINK', 'Add Link');
 		$fields->insertBefore(HeaderField::create('LinkHeader', $title), _t('Linkable.TITLE', 'Title'));

@@ -60,6 +60,10 @@ class Link extends DataObject{
 		$fields->dataFieldByName('FileID')->displayIf("Type")->isEqualTo("File");
 		$fields->dataFieldByName('SiteTreeID')->displayIf("Type")->isEqualTo("SiteTree");
 
+		if($this->SiteTreeID && !$this->SiteTree()->isPublished()){
+			$fields->dataFieldByName('SiteTreeID')->setRightTitle(_t('Linkable.DELETEDWARNING', 'Warning: The selected page appears to have been deleted or unpublished. This link may not appear or may be broken in the frontend'));			
+		}		
+
 		$this->extend('updateCMSFields', $fields);
 
 		return $fields;
@@ -100,10 +104,11 @@ class Link extends DataObject{
 	 * @return String
 	 **/
 	public function forTemplate(){
-		$url = $this->getLinkURL();
-		$title = $this->Title ? $this->Title : $url; // legacy
-		$target = $this->getTargetAttr();
-		return "<a href='$url' $target>$title</a>";
+		if($url = $this->getLinkURL()){
+			$title = $this->Title ? $this->Title : $url; // legacy
+			$target = $this->getTargetAttr();
+			return "<a href='$url' $target>$title</a>";	
+		}
 	}
 
 
@@ -117,6 +122,10 @@ class Link extends DataObject{
 			return $this->URL;
 		}else{
 			if($this->Type && $component = $this->getComponent($this->Type)){
+				if(!$component->exists()){
+					return false;
+				} 
+
 				if($component->hasMethod('Link')){
 					return $component->Link();	
 				}else{

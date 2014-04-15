@@ -19,27 +19,32 @@ A Link Object can be linked to an External URL or, an internal Page or File in t
 
 ### Example usage
 
-	class Page extends SiteTree{
-		
-		static $has_one = array(
-			'Link' => 'Link'
-		);		
+```php
+class Page extends SiteTree{
+	
+	static $has_one = array(
+		'Link' => 'Link'
+	);		
 
-		public function getCMSFields(){
-			$fields = parent::getCMSFields();
-			$fields->addFieldToTab('Root.Link', LinkField::create('LinkID', 'Link to page or file'));
-		}
+	public function getCMSFields(){
+		$fields = parent::getCMSFields();
+		$fields->addFieldToTab('Root.Link', LinkField::create('LinkID', 'Link to page or file'));
+	}
 
-		...
+	...
+```
 
 In your template, you can render the links anchor tag with
 	
 	$Link 
 
-Or roll your own tag
+Or roll your own tag, making sure that the url is set first to avoid broken links
 
+```html
+<% if $Link.LinkURL %>
 	<a href="$Link.LinkURL" $Link.TargetAttr>$Link.Title</a>
-
+<% end_if %>
+```
 
 ## EmbeddedObject/Field
 
@@ -47,27 +52,33 @@ Use the EmbeddedObject/Field to easily add oEmbed content to a DataObject or Pag
 
 ### Example usage
 
-	class Page extends SiteTree{
-		
-		static $has_one = array(
-			'Video' => 'EmbeddedObject'
-		);		
+```php
+class Page extends SiteTree{
+	
+	static $has_one = array(
+		'Video' => 'EmbeddedObject'
+	);		
 
-		public function getCMSFields(){
-			$fields = parent::getCMSFields();
-			$fields->addFieldToTab('Root.Video', EmbeddedObjectField::create('Video', 'Video from oEmbed URL', $this->Video()));
-		}
+	public function getCMSFields(){
+		$fields = parent::getCMSFields();
+		$fields->addFieldToTab('Root.Video', EmbeddedObjectField::create('Video', 'Video from oEmbed URL', $this->Video()));
+	}
 
-		...
+	...
+```
 
 In your template, you can render the object with the name of the has_one relation
 
-	$Video
+```html
+$Video
+```
 
 You can also access other metadata on the object via
 
-	<h1>$Video.Title</h1>
-	$Video.Description
-	$Video.ThumbURL
+```html
+<h1>$Video.Title</h1>
+$Video.Description
+$Video.ThumbURL
+```
 
 See EmbeddedObject.php for a list of properties saved available in $db.
