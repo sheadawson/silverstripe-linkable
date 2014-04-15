@@ -33,7 +33,7 @@ class Link extends DataObject{
 	 * @var array
 	 **/
 	private static $types = array(
-		'URL' => 'External URL',
+		'URL' => 'URL',
 		'File' => 'File on this website',
 		'SiteTree' => 'Page on this website'
 	);
@@ -166,9 +166,12 @@ class Link extends DataObject{
 			if($this->URL ==''){
 				$valid = false;
 				$message = _t('Linkable.VALIDATIONERROR_EMPTYURL', 'You must enter a URL for a link type of "URL"');
-			}elseif(substr($this->URL, 0, 1) !='#' && !filter_var($this->URL, FILTER_VALIDATE_URL)){
-				$valid = false;
-				$message = _t('Linkable.VALIDATIONERROR_VALIDURL', 'Please enter a valid URL and be sure to include http://');
+			}else{
+				$allowedFirst = array('#', '/');
+				if(!in_array(substr($this->URL, 0, 1), $allowedFirst) && !filter_var($this->URL, FILTER_VALIDATE_URL)){
+					$valid = false;
+					$message = _t('Linkable.VALIDATIONERROR_VALIDURL', 'Please enter a valid URL. Be sure to include http:// for an external URL. Or begin your internal url/anchor with a "/" character');
+				}
 			}
 		}else{
 			if(!$this->getComponent($this->Type)->exists()){
