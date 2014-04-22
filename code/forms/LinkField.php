@@ -79,7 +79,7 @@ class LinkField extends TextField{
 	 **/
 	public function doSaveLink($data, $form){
 		$link = $this->getLinkObject() ? $this->getLinkObject() : Link::create();
-		$link->update($data);
+		$form->saveInto($link);
 		try {
 			$link->write();	
 		} catch (ValidationException $e) {
