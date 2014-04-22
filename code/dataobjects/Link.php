@@ -13,6 +13,7 @@ class Link extends DataObject{
 		'Title' => 'Varchar(255)',
 		'Type' => 'Varchar',
 		'URL' => 'Varchar(255)',
+		'Email' => 'Varchar(255)',
 		'OpenInNewWindow' => 'Boolean'
 	);
 
@@ -34,6 +35,7 @@ class Link extends DataObject{
 	 **/
 	private static $types = array(
 		'URL' => 'URL',
+		'Email' => 'Email address',
 		'File' => 'File on this website',
 		'SiteTree' => 'Page on this website'
 	);
@@ -53,10 +55,11 @@ class Link extends DataObject{
 		$fields->replaceField('File', TreeDropdownField::create('FileID', _t('Linkable.FILE', 'File'), 'File', 'ID', 'Title'), 'OpenInNewWindow');
 		$fields->replaceField('SiteTreeID', TreeDropdownField::create('SiteTreeID', _t('Linkable.PAGE', 'Page'), 'SiteTree'), 'OpenInNewWindow');
 		
-		$fields->addFieldToTab('Root.Main', $newWindow = CheckboxField::create('OpenInNewWindow', _t('Linkable.OPENINNEWWINDOW', 'Open link in a new window')));
-		$newWindow->displayIf('Type')->isNotEmpty();
+		//$fields->addFieldToTab('Root.Main', $newWindow = CheckboxField::create('OpenInNewWindow', _t('Linkable.OPENINNEWWINDOW', 'Open link in a new window')));
+		//$newWindow->displayIf('Type')->isNotEmpty();
 		
 		$fields->dataFieldByName('URL')->displayIf("Type")->isEqualTo("URL");
+		$fields->dataFieldByName('Email')->setTitle(_t('Linkable.EMAILADDRESS', 'Email Address'))->displayIf("Type")->isEqualTo("Email");
 		$fields->dataFieldByName('FileID')->displayIf("Type")->isEqualTo("File");
 		$fields->dataFieldByName('SiteTreeID')->displayIf("Type")->isEqualTo("SiteTree");
 
@@ -77,8 +80,8 @@ class Link extends DataObject{
 	public function onAfterWrite(){
 		parent::onAfterWrite();
 		if(!$this->Title){
-			if($this->Type == 'URL'){
-				$this->Title = $this->URL;
+			if($this->Type == 'URL' || $this->Type == 'Email'){
+				$this->Title = $this->{$this->Type};
 			}elseif($this->Type == 'SiteTree'){
 				$this->Title = $this->SiteTree()->MenuTitle;
 			}else{
@@ -120,6 +123,8 @@ class Link extends DataObject{
 		if(!$this->ID) return;
 		if($this->Type == 'URL'){
 			return $this->URL;
+		}elseif($this->Type == 'Email'){
+			return $this->Email ? "mailto:$this->Email" : null;
 		}else{
 			if($this->Type && $component = $this->getComponent($this->Type)){
 				if(!$component->exists()){
@@ -171,6 +176,16 @@ class Link extends DataObject{
 				if(!in_array(substr($this->URL, 0, 1), $allowedFirst) && !filter_var($this->URL, FILTER_VALIDATE_URL)){
 					$valid = false;
 					$message = _t('Linkable.VALIDATIONERROR_VALIDURL', 'Please enter a valid URL. Be sure to include http:// for an external URL. Or begin your internal url/anchor with a "/" character');
+				}
+			}
+		}elseif($this->Type == 'Email'){
+			if($this->Email ==''){
+				$valid = false;
+				$message = _t('Linkable.VALIDATIONERROR_EMPTYEMAIL', 'You must enter an Email Address for a link type of "Email"');
+			}else{
+				if(!filter_var($this->Email, FILTER_VALIDATE_EMAIL)){
+					$valid = false;
+					$message = _t('Linkable.VALIDATIONERROR_VALIDEMAIL', 'Please enter a valid Email address');
 				}
 			}
 		}else{
