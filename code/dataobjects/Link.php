@@ -14,6 +14,7 @@ class Link extends DataObject{
 		'Type' => 'Varchar',
 		'URL' => 'Varchar(255)',
 		'Email' => 'Varchar(255)',
+		'Anchor' => 'Varchar(255)',
 		'OpenInNewWindow' => 'Boolean'
 	);
 
@@ -53,10 +54,11 @@ class Link extends DataObject{
 		$fields->dataFieldByName('Title')->setTitle(_t('Linkable.TITLE', 'Title'))->setRightTitle(_t('Linkable.OPTIONALTITLE', 'Optional. Will be auto-generated from link if left blank'));
 		$fields->replaceField('Type', DropdownField::create('Type', _t('Linkable.LINKTYPE', 'Link Type'), $i18nTypes)->setEmptyString(' '), 'OpenInNewWindow');
 		$fields->replaceField('File', TreeDropdownField::create('FileID', _t('Linkable.FILE', 'File'), 'File', 'ID', 'Title'), 'OpenInNewWindow');
-		$fields->replaceField('SiteTreeID', TreeDropdownField::create('SiteTreeID', _t('Linkable.PAGE', 'Page'), 'SiteTree'), 'OpenInNewWindow');
 		
-		//$fields->addFieldToTab('Root.Main', $newWindow = CheckboxField::create('OpenInNewWindow', _t('Linkable.OPENINNEWWINDOW', 'Open link in a new window')));
-		//$newWindow->displayIf('Type')->isNotEmpty();
+		$fields->addFieldToTab('Root.Main', TreeDropdownField::create('SiteTreeID', _t('Linkable.PAGE', 'Page'), 'SiteTree'));
+
+		$fields->addFieldToTab('Root.Main', $newWindow = CheckboxField::create('OpenInNewWindow', _t('Linkable.OPENINNEWWINDOW', 'Open link in a new window')));
+		$newWindow->displayIf('Type')->isNotEmpty();
 		
 		$fields->dataFieldByName('URL')->displayIf("Type")->isEqualTo("URL");
 		$fields->dataFieldByName('Email')->setTitle(_t('Linkable.EMAILADDRESS', 'Email Address'))->displayIf("Type")->isEqualTo("Email");
@@ -65,7 +67,11 @@ class Link extends DataObject{
 
 		if($this->SiteTreeID && !$this->SiteTree()->isPublished()){
 			$fields->dataFieldByName('SiteTreeID')->setRightTitle(_t('Linkable.DELETEDWARNING', 'Warning: The selected page appears to have been deleted or unpublished. This link may not appear or may be broken in the frontend'));			
-		}		
+		}	
+
+		$fields->addFieldToTab('Root.Main', $anchor = TextField::create('Anchor', _t('Linkable.ANCHOR', 'Anchor')), 'OpenInNewWindow');
+		$anchor->setRightTitle('Include # at the start of your anchor name');
+		$anchor->displayIf("Type")->isEqualTo("SiteTree");	
 
 		$this->extend('updateCMSFields', $fields);
 
@@ -132,7 +138,7 @@ class Link extends DataObject{
 				} 
 
 				if($component->hasMethod('Link')){
-					return $component->Link();	
+					return $component->Link() . $this->Anchor;
 				}else{
 					return "Please implement a Link() method on your dataobject \"$this->Type\"";
 				}
@@ -194,6 +200,7 @@ class Link extends DataObject{
 				$message = _t('Linkable.VALIDATIONERROR_OBJECT', "Please select a {value} object to link to", array('value' => $this->Type));
 			}
 		}
+
 		$result = ValidationResult::create($valid, $message);
 		$this->extend('validate', $result);
 		return $result;
