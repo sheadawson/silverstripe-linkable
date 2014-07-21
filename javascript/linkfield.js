@@ -8,12 +8,21 @@ jQuery.entwine("linkfield", function($) {
 			var self = this;
 			this.setDialog(self.siblings('.linkfield-dialog:first'));
 
-			var url = this.parents('form').attr('action') + '/field/' + this.attr('name') + '/LinkFormHTML';
+			var formUrl = this.parents('form').attr('action'),
+				formUrlParts = formUrl.split('?'),
+				formUrl = formUrlParts[0],
+				url = formUrl + '/field/' + this.attr('name') + '/LinkFormHTML';
+
 			if(self.val().length){
 				url = url + '?LinkID=' + self.val();
 			}else{
 				url = url + '?LinkID=0';
 			}
+
+			if(typeof formUrlParts[1] !== 'undefined') {
+				url = url + '&' + formUrlParts[1];
+			}
+
 			this.setURL(url);
 
 			// configure the dialog
