@@ -91,7 +91,7 @@ class Link extends DataObject{
 			}elseif($this->Type == 'SiteTree'){
 				$this->Title = $this->SiteTree()->MenuTitle;
 			}else{
-				if($component = $this->getComponent($this->Type)){
+				if($this->Type && $component = $this->getComponent($this->Type)){
 					$this->Title = $component->Title;
 				}
 			}
