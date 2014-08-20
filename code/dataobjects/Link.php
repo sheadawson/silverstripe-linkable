@@ -195,7 +195,7 @@ class Link extends DataObject{
 				}
 			}
 		}else{
-			if(!$this->getComponent($this->Type)->exists()){
+			if($this->Type && !$this->getComponent($this->Type)->exists()){
 				$valid = false;
 				$message = _t('Linkable.VALIDATIONERROR_OBJECT', "Please select a {value} object to link to", array('value' => $this->Type));
 			}
