@@ -23,12 +23,12 @@ A Link Object can be linked to a URL or, an internal Page or File in the SilverS
 class Page extends SiteTree{
 	
 	static $has_one = array(
-		'Link' => 'Link'
+		'ExampleLink' => 'Link'
 	);		
 
 	public function getCMSFields(){
 		$fields = parent::getCMSFields();
-		$fields->addFieldToTab('Root.Link', LinkField::create('LinkID', 'Link to page or file'));
+		$fields->addFieldToTab('Root.Link', LinkField::create('ExampleLinkID', 'Link to page or file'));
 	}
 
 	...
@@ -36,13 +36,13 @@ class Page extends SiteTree{
 
 In your template, you can render the links anchor tag with
 	
-	$Link 
+	$ExampleLink 
 
 Or roll your own tag, making sure that the url is set first to avoid broken links
 
 ```html
-<% if $Link.LinkURL %>
-	<a href="$Link.LinkURL" $Link.TargetAttr>$Link.Title</a>
+<% if $ExampleLink.LinkURL %>
+	<a href="$ExampleLink.LinkURL" $ExampleLink.TargetAttr>$ExampleLink.Title</a>
 <% end_if %>
 ```
 
