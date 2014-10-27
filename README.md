@@ -13,6 +13,10 @@
 
 This module contains a couple of handy FormFields / DataObjects for managing external and internal links on DataObjects, including oEmbed links.
 
+## Installation with [Composer](https://getcomposer.org/)
+
+```composer require "sheadawson/silverstripe-linkable"```
+
 ## Link / LinkField
 
 A Link Object can be linked to a URL or, an internal Page or File in the SilverStripe instance. A DataObject, such as a Page can have many Link objects managed with a grid field, or one Link managed with LinkField. 
