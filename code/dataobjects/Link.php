@@ -43,7 +43,12 @@ class Link extends DataObject{
 
 
 	public function getCMSFields(){
-		$fields = parent::getCMSFields();
+		$fields = $this->scaffoldFormFields(array(
+			// Don't allow has_many/many_many relationship editing before the record is first saved
+			'includeRelations' => ($this->ID > 0),
+			'tabbed' => true,
+			'ajaxSafe' => true
+		));
 
         $types = $this->config()->get('types');
         $i18nTypes = array();
