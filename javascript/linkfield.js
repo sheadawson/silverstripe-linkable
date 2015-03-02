@@ -11,7 +11,7 @@ jQuery.entwine("linkfield", function($) {
 			var formUrl = this.parents('form').attr('action'),
 				formUrlParts = formUrl.split('?'),
 				formUrl = formUrlParts[0],
-				url = formUrl + '/field/' + this.attr('name') + '/LinkFormHTML';
+				url = encodeURI(formUrl) + '/field/' + this.attr('name') + '/LinkFormHTML';
 
 			if(self.val().length){
 				url = url + '?LinkID=' + self.val();
