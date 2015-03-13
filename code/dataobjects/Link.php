@@ -57,7 +57,7 @@ class Link extends DataObject{
         }
 
 		$fields->dataFieldByName('Title')->setTitle(_t('Linkable.TITLE', 'Title'))->setRightTitle(_t('Linkable.OPTIONALTITLE', 'Optional. Will be auto-generated from link if left blank'));
-		$fields->replaceField('Type', DropdownField::create('Type', _t('Linkable.LINKTYPE', 'Link Type'), $i18nTypes)->setEmptyString(' ')->addExtraClass('no-chzn'), 'OpenInNewWindow');
+		$fields->replaceField('Type', DropdownField::create('Type', _t('Linkable.LINKTYPE', 'Link Type'), $i18nTypes)->setEmptyString(' '), 'OpenInNewWindow');
 		$fields->replaceField('File', TreeDropdownField::create('FileID', _t('Linkable.FILE', 'File'), 'File', 'ID', 'Title'), 'OpenInNewWindow');
 		
 		$fields->addFieldToTab('Root.Main', TreeDropdownField::create('SiteTreeID', _t('Linkable.PAGE', 'Page'), 'SiteTree'));
@@ -200,7 +200,7 @@ class Link extends DataObject{
 				}
 			}
 		}else{
-			if($this->Type && !$this->getComponent($this->Type)->exists()){
+			if($this->Type && empty($this->{$this->Type.'ID'})){
 				$valid = false;
 				$message = _t('Linkable.VALIDATIONERROR_OBJECT', "Please select a {value} object to link to", array('value' => $this->Type));
 			}
