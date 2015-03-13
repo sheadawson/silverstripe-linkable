@@ -19,7 +19,7 @@
 		"php": ">=5.3.2",
 		"silverstripe/framework": "3.*",
 		"silverstripe/cms": "3.*",
-		"unclecheese/display-logic": "1.0.8"
+		"unclecheese/display-logic": "1.2.1"
 	},
 	"extra": {
 		"installer-name": "linkable"
