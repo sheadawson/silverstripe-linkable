@@ -56,19 +56,25 @@ class Link extends DataObject{
             $i18nTypes[$key] = _t('Linkable.TYPE'.strtoupper($key), $label);
         }
 
+        $fields->removeByName('SiteTreeID');
+        $fields->removeByName('File');
+
 		$fields->dataFieldByName('Title')->setTitle(_t('Linkable.TITLE', 'Title'))->setRightTitle(_t('Linkable.OPTIONALTITLE', 'Optional. Will be auto-generated from link if left blank'));
 		$fields->replaceField('Type', DropdownField::create('Type', _t('Linkable.LINKTYPE', 'Link Type'), $i18nTypes)->setEmptyString(' '), 'OpenInNewWindow');
-		$fields->replaceField('File', TreeDropdownField::create('FileID', _t('Linkable.FILE', 'File'), 'File', 'ID', 'Title'), 'OpenInNewWindow');
 		
-		$fields->addFieldToTab('Root.Main', TreeDropdownField::create('SiteTreeID', _t('Linkable.PAGE', 'Page'), 'SiteTree'));
+		$fields->addFieldToTab('Root.Main', DisplayLogicWrapper::create(
+			TreeDropdownField::create('FileID', _t('Linkable.FILE', 'File'), 'File', 'ID', 'Title')
+		)->displayIf("Type")->isEqualTo("File")->end());
+		
+		$fields->addFieldToTab('Root.Main', DisplayLogicWrapper::create(
+			TreeDropdownField::create('SiteTreeID', _t('Linkable.PAGE', 'Page'), 'SiteTree')
+		)->displayIf("Type")->isEqualTo("SiteTree")->end());
 
 		$fields->addFieldToTab('Root.Main', $newWindow = CheckboxField::create('OpenInNewWindow', _t('Linkable.OPENINNEWWINDOW', 'Open link in a new window')));
 		$newWindow->displayIf('Type')->isNotEmpty();
 		
 		$fields->dataFieldByName('URL')->displayIf("Type")->isEqualTo("URL");
 		$fields->dataFieldByName('Email')->setTitle(_t('Linkable.EMAILADDRESS', 'Email Address'))->displayIf("Type")->isEqualTo("Email");
-		$fields->dataFieldByName('FileID')->displayIf("Type")->isEqualTo("File");
-		$fields->dataFieldByName('SiteTreeID')->displayIf("Type")->isEqualTo("SiteTree");
 
 		if($this->SiteTreeID && !$this->SiteTree()->isPublished()){
 			$fields->dataFieldByName('SiteTreeID')->setRightTitle(_t('Linkable.DELETEDWARNING', 'Warning: The selected page appears to have been deleted or unpublished. This link may not appear or may be broken in the frontend'));			
