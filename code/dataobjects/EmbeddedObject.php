@@ -25,8 +25,8 @@ class EmbeddedObject extends DataObject {
 			'width'	=> $this->Width,
 			'height' => $this->Height,
 		);
-		$result = Oembed::get_oembed_from_url($url, false, $options);
-		return $result;
+		$this->setFromURL($this->SourceURL);
+		return $this;
 	}
 	
 	public function onBeforeWrite() {
@@ -45,14 +45,24 @@ class EmbeddedObject extends DataObject {
 	}
 
 	public function updateEmbedHTML() {
-		$options = array(
-			'width'	=> $this->Width,
-			'height' => $this->Height,
-		);
-		$info = Oembed::get_oembed_from_url($this->SourceURL, false, $options);
-		if ($info && $info->exists()) {
-			$this->EmbedHTML = $info->forTemplate();
-		}
+		$this->setFromURL($this->SourceURL);
+	}
+	
+	public function setFromURL($url) {
+		$info = Embed\Embed::create($url); // , array('image' => array('minImageWidth' => $this->Width, 'minImageHeight' => $this->Height)));
+		$this->setFromEmbed($info);
+	}
+	
+	public function setFromEmbed(\Embed\Adapters\Adapter $info) {
+		
+		$this->Title = $info->getTitle();
+		$this->SourceURL = $info->getUrl();
+		$this->Width = $info->getWidth();
+		$this->Height = $info->getHeight();
+		$this->ThumbURL = $info->getImage();
+		$this->Description = $info->getDescription() ? $info->getDescription(): $info->getTitle();
+		$this->Type = $info->getType();
+		$this->EmbedHTML = $info->getCode();
 	}
 
 	public function forTemplate() {

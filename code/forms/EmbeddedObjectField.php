@@ -98,16 +98,11 @@ class EmbeddedObjectField extends FormField {
 		$url = $request->postVar('URL');
 		if (strlen($url)) {
 			$info = Oembed::get_oembed_from_url($url);
-			if ($info && $info->exists()) {
+			$info = Embed\Embed::create($url);
+			if ($info) {
 				$object = EmbeddedObject::create();
-				$object->Title = $info->title;
-				$object->SourceURL = $url;
-				$object->Width = $info->width;
-				$object->Height = $info->height;
-				$object->ThumbURL = $info->thumbnail_url;
-				$object->Description = $info->description ? $info->description : $info->title;
-				$object->Type = $info->type;
-				$object->EmbedHTML = $info->forTemplate();
+				$object->setFromEmbed($info);
+				
 				$this->object = $object;
 				// needed to make sure the check in FieldHolder works out
 				$object->ID = -1;
