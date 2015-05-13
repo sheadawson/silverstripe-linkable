@@ -66,6 +66,7 @@ class Page extends SiteTree{
 	public function getCMSFields(){
 		$fields = parent::getCMSFields();
 		$fields->addFieldToTab('Root.Video', EmbeddedObjectField::create('Video', 'Video from oEmbed URL', $this->Video()));
+		return $fields;
 	}
 
 	...
