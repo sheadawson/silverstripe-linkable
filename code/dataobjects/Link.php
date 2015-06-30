@@ -8,6 +8,11 @@
  * @author <shea@silverstripe.com.au>
  **/
 class Link extends DataObject{
+	
+	/**
+	 * @var string custom CSS classes for template
+	 */
+	protected $cssClass;
 
 	private static $db = array(
 		'Title' => 'Varchar(255)',
@@ -117,6 +122,27 @@ class Link extends DataObject{
 		
 
 	}
+	
+	
+	/**
+	 * Add CSS classes.
+	 * @param string $class CSS classes.
+	 * @return Link
+	 **/
+	public function setCSSClass($class){
+		$this->cssClass = $class;
+		return $this;
+	}
+	
+	
+	/**
+	 * Gets the html class attribute for this link.
+	 * @return String
+	 **/
+	public function getClassAttr(){
+		$class = $this->cssClass ? Convert::raw2att( $this->cssClass ) : '';
+		return $class ? "class='$class'" : '';
+	}
 
 
 	/**
@@ -127,7 +153,8 @@ class Link extends DataObject{
 		if($url = $this->getLinkURL()){
 			$title = $this->Title ? $this->Title : $url; // legacy
 			$target = $this->getTargetAttr();
-			return "<a href='$url' $target>$title</a>";	
+			$class = $this->getClassAttr();
+			return "<a href='$url' $target $class>$title</a>";	
 		}
 	}
 
@@ -159,11 +186,11 @@ class Link extends DataObject{
 
 
 	/**
-     * Gets the html target attribute for the anchor tag
-     * @return String
-     **/
-    public function getTargetAttr(){
-        return $this->OpenInNewWindow ? "target='_blank'" : '';
+     	 * Gets the html target attribute for the anchor tag
+     	 * @return String
+     	 **/
+    	public function getTargetAttr(){
+        	return $this->OpenInNewWindow ? "target='_blank'" : '';
 	}
 
 
