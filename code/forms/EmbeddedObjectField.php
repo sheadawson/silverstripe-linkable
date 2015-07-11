@@ -69,15 +69,16 @@ class EmbeddedObjectField extends FormField {
 
 	public function saveInto(DataObjectInterface $record) {
 		$val = $this->Value();
+		$field = $this->getName() . 'ID';
 		
+		if (!strlen($val['sourceurl']) && $this->object) {
+			$this->object->delete();
+			$record->$field = 0;
+			return;
+		}
+
  		if (!$this->object) {
 			$this->object = EmbeddedObject::create();
-		}
-		
-		if (!strlen($val['sourceurl'])) {
-			foreach ($val as $key => $null) {
-				$val[$key] = '';
-			}
 		}
 		
 		$props = array_keys(Config::inst()->get('EmbeddedObject', 'db'));
@@ -86,8 +87,6 @@ class EmbeddedObjectField extends FormField {
 		}
 
 		$this->object->write();
-
-		$field = $this->getName() . 'ID';
 		$record->$field = $this->object->ID;
 	}
 	
