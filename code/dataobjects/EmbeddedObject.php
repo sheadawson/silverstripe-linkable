@@ -49,8 +49,10 @@ class EmbeddedObject extends DataObject {
 	}
 	
 	public function setFromURL($url) {
-		$info = Embed\Embed::create($url); // , array('image' => array('minImageWidth' => $this->Width, 'minImageHeight' => $this->Height)));
-		$this->setFromEmbed($info);
+		if($url){
+			$info = Embed\Embed::create($url); // , array('image' => array('minImageWidth' => $this->Width, 'minImageHeight' => $this->Height)));
+			$this->setFromEmbed($info);
+		}
 	}
 	
 	public function setFromEmbed(\Embed\Adapters\Adapter $info) {
