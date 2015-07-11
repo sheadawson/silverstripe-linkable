@@ -72,7 +72,9 @@ class EmbeddedObjectField extends FormField {
 		$field = $this->getName() . 'ID';
 		
 		if (!strlen($val['sourceurl']) && $this->object) {
-			$this->object->delete();
+			if($this->object->exists()){
+				$this->object->delete();
+			}
 			$record->$field = 0;
 			return;
 		}
