@@ -83,7 +83,14 @@ jQuery.entwine("linkfield", function($) {
 
 	$(".linkfield-remove-button").entwine({
 		onclick: function() {
-			var url = this.parents('form').attr('action') + '/field/' + this.siblings('input:first').prop('name') + '/doRemoveLink';
+			var formUrl = this.parents('form').attr('action'),
+				formUrlParts = formUrl.split('?'),
+				formUrl = formUrlParts[0],
+				url = encodeURI(formUrl) + '/field/' + this.siblings('input:first').prop('name') + '/doRemoveLink';
+
+			if(typeof formUrlParts[1] !== 'undefined') {
+				url = url + '&' + formUrlParts[1];
+			}
 			var holder = this.parents('.field:first');
 			this.parents('.middleColumn:first').html("<img src='framework/images/network-save.gif' />");
 			holder.load(url);
