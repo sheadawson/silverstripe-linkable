@@ -62,7 +62,7 @@ class Link extends DataObject{
         }
 
         $fields->removeByName('SiteTreeID');
-        $fields->removeByName('File');
+        $fields->removeByName('FileID');
 
 		$fields->dataFieldByName('Title')->setTitle(_t('Linkable.TITLE', 'Title'))->setRightTitle(_t('Linkable.OPTIONALTITLE', 'Optional. Will be auto-generated from link if left blank'));
 		$fields->replaceField('Type', DropdownField::create('Type', _t('Linkable.LINKTYPE', 'Link Type'), $i18nTypes)->setEmptyString(' '), 'OpenInNewWindow');
