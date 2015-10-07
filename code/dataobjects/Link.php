@@ -8,7 +8,7 @@
  * @author <shea@silverstripe.com.au>
  **/
 class Link extends DataObject{
-	
+
 	/**
 	 * @var string custom CSS classes for template
 	 */
@@ -63,33 +63,33 @@ class Link extends DataObject{
 
         $fields->removeByName('SiteTreeID');
         // seem to need to remove both of these for different SS versions...
-        $fields->removeByName('FileID'); 
+        $fields->removeByName('FileID');
         $fields->removeByName('File');
 
 		$fields->dataFieldByName('Title')->setTitle(_t('Linkable.TITLE', 'Title'))->setRightTitle(_t('Linkable.OPTIONALTITLE', 'Optional. Will be auto-generated from link if left blank'));
 		$fields->replaceField('Type', DropdownField::create('Type', _t('Linkable.LINKTYPE', 'Link Type'), $i18nTypes)->setEmptyString(' '), 'OpenInNewWindow');
-		
+
 		$fields->addFieldToTab('Root.Main', DisplayLogicWrapper::create(
 			TreeDropdownField::create('FileID', _t('Linkable.FILE', 'File'), 'File', 'ID', 'Title')
 		)->displayIf("Type")->isEqualTo("File")->end());
-		
+
 		$fields->addFieldToTab('Root.Main', DisplayLogicWrapper::create(
 			TreeDropdownField::create('SiteTreeID', _t('Linkable.PAGE', 'Page'), 'SiteTree')
 		)->displayIf("Type")->isEqualTo("SiteTree")->end());
 
 		$fields->addFieldToTab('Root.Main', $newWindow = CheckboxField::create('OpenInNewWindow', _t('Linkable.OPENINNEWWINDOW', 'Open link in a new window')));
 		$newWindow->displayIf('Type')->isNotEmpty();
-		
+
 		$fields->dataFieldByName('URL')->displayIf("Type")->isEqualTo("URL");
 		$fields->dataFieldByName('Email')->setTitle(_t('Linkable.EMAILADDRESS', 'Email Address'))->displayIf("Type")->isEqualTo("Email");
 
 		if($this->SiteTreeID && !$this->SiteTree()->isPublished()){
-			$fields->dataFieldByName('SiteTreeID')->setRightTitle(_t('Linkable.DELETEDWARNING', 'Warning: The selected page appears to have been deleted or unpublished. This link may not appear or may be broken in the frontend'));			
-		}	
+			$fields->dataFieldByName('SiteTreeID')->setRightTitle(_t('Linkable.DELETEDWARNING', 'Warning: The selected page appears to have been deleted or unpublished. This link may not appear or may be broken in the frontend'));
+		}
 
 		$fields->addFieldToTab('Root.Main', $anchor = TextField::create('Anchor', _t('Linkable.ANCHOR', 'Anchor')), 'OpenInNewWindow');
 		$anchor->setRightTitle('Include # at the start of your anchor name');
-		$anchor->displayIf("Type")->isEqualTo("SiteTree");	
+		$anchor->displayIf("Type")->isEqualTo("SiteTree");
 
 		$this->extend('updateCMSFields', $fields);
 
@@ -121,11 +121,11 @@ class Link extends DataObject{
 			$this->write();
 		}
 
-		
+
 
 	}
-	
-	
+
+
 	/**
 	 * Add CSS classes.
 	 * @param string $class CSS classes.
@@ -135,8 +135,8 @@ class Link extends DataObject{
 		$this->cssClass = $class;
 		return $this;
 	}
-	
-	
+
+
 	/**
 	 * Gets the html class attribute for this link.
 	 * @return String
@@ -156,7 +156,7 @@ class Link extends DataObject{
 			$title = $this->Title ? $this->Title : $url; // legacy
 			$target = $this->getTargetAttr();
 			$class = $this->getClassAttr();
-			return "<a href='$url' $target $class>$title</a>";	
+			return "<a href='$url' $target $class>$title</a>";
 		}
 	}
 
@@ -175,7 +175,7 @@ class Link extends DataObject{
 			if($this->Type && $component = $this->getComponent($this->Type)){
 				if(!$component->exists()){
 					return false;
-				} 
+				}
 
 				if($component->hasMethod('Link')){
 					return $component->Link() . $this->Anchor;
