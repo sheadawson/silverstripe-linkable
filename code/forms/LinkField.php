@@ -49,7 +49,7 @@ class LinkField extends TextField{
 		}
 
 		$link = null;
-		if($linkID = (int)$this->request->getVar('LinkID')){
+		if($linkID = (int) $this->request->getVar('LinkID')){
 			$link = Link::get()->byID($linkID);
 		}
 		$link = $link ? $link : singleton('Link');
@@ -117,7 +117,7 @@ class LinkField extends TextField{
 
 		if(!$this->linkObject){
 			$id = $this->Value() ? $this->Value() : $requestID;
-			if((int)$id){
+			if((int) $id){
 				$this->linkObject = Link::get()->byID($id);
 			}
 		}
