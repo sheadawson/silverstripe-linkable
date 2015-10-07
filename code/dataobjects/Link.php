@@ -99,7 +99,7 @@ class Link extends DataObject{
 
 	/**
 	 * If the title is empty, set it to getLinkURL()
-	 * @return String
+	 * @return string
 	 **/
 	public function onAfterWrite(){
 		parent::onAfterWrite();
@@ -139,7 +139,7 @@ class Link extends DataObject{
 	
 	/**
 	 * Gets the html class attribute for this link.
-	 * @return String
+	 * @return string
 	 **/
 	public function getClassAttr(){
 		$class = $this->cssClass ? Convert::raw2att( $this->cssClass ) : '';
@@ -149,7 +149,7 @@ class Link extends DataObject{
 
 	/**
 	 * Renders an HTML anchor tag for this link
-	 * @return String
+	 * @return string
 	 **/
 	public function forTemplate(){
 		if($url = $this->getLinkURL()){
@@ -163,7 +163,7 @@ class Link extends DataObject{
 
 	/**
 	 * Works out what the URL for this link should be based on it's Type
-	 * @return String
+	 * @return string
 	 **/
 	public function getLinkURL(){
 		if(!$this->ID) return;
@@ -189,7 +189,7 @@ class Link extends DataObject{
 
 	/**
      	 * Gets the html target attribute for the anchor tag
-     	 * @return String
+     	 * @return string
      	 **/
     	public function getTargetAttr(){
         	return $this->OpenInNewWindow ? "target='_blank'" : '';
@@ -198,7 +198,7 @@ class Link extends DataObject{
 
 	/**
 	 * Gets the description label of this links type
-	 * @return String
+	 * @return string
 	 **/
 	public function getLinkType(){
 		$types = $this->config()->get('types');

@@ -75,7 +75,7 @@ class LinkField extends TextField{
 	/**
 	 * Either updates the current link or creates a new one
 	 * Returns field template to update the interface
-	 * @return String
+	 * @return string
 	 **/
 	public function doSaveLink($data, $form){
 		$link = $this->getLinkObject() ? $this->getLinkObject() : Link::create();
@@ -95,7 +95,7 @@ class LinkField extends TextField{
 	/**
 	 * Delete link action - TODO
 	 *
-	 * @return String
+	 * @return string
 	 **/
 	public function doRemoveLink(){
 		$this->setValue('');
@@ -128,7 +128,7 @@ class LinkField extends TextField{
 	/**
 	 * Returns the HTML of the LinkForm for the dialog
 	 *
-	 * @return String
+	 * @return string
 	 **/
 	public function LinkFormHTML(){
 		return $this->LinkForm()->forTemplate();
