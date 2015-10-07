@@ -55,7 +55,7 @@ class LinkField extends TextField{
 		$link = $link ? $link : singleton('Link');
 
 		$fields = $link->getCMSFields();
-		
+
 		$title = $link ? _t('Linkable.EDITLINK', 'Edit Link') : _t('Linkable.ADDLINK', 'Add Link');
 		$fields->insertBefore(HeaderField::create('LinkHeader', $title), _t('Linkable.TITLE', 'Title'));
 		$actions = FieldList::create($action);
@@ -81,7 +81,7 @@ class LinkField extends TextField{
 		$link = $this->getLinkObject() ? $this->getLinkObject() : Link::create();
 		$form->saveInto($link);
 		try {
-			$link->write();	
+			$link->write();
 		} catch (ValidationException $e) {
 			$form->sessionMessage($e->getMessage(), 'bad');
 			return $form->forTemplate();
@@ -102,7 +102,7 @@ class LinkField extends TextField{
 		return $this->FieldHolder();
 	}
 
-	
+
 	/**
 	 * Returns the current link object
 	 *
@@ -110,7 +110,7 @@ class LinkField extends TextField{
 	 **/
 	public function getLinkObject(){
 		$requestID = Controller::curr()->request->requestVar('LinkID');
-		
+
 		if($requestID == '0'){
 			return;
 		}
@@ -119,7 +119,7 @@ class LinkField extends TextField{
 			$id = $this->Value() ? $this->Value() : $requestID;
 			if((int)$id){
 				$this->linkObject = Link::get()->byID($id);
-			}		
+			}
 		}
 		return $this->linkObject;
 	}

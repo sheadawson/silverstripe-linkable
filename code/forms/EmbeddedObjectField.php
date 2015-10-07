@@ -8,15 +8,15 @@
  * @author <marcus@silverstripe.com.au>
  **/
 class EmbeddedObjectField extends FormField {
-	
+
 	private static $allowed_actions = array(
 		'update'
 	);
 
 	protected $object;
-	
+
 	protected $message;
-	
+
 	public function setValue($value) {
 		if ($value instanceof EmbeddedObject) {
 			$this->object = $value;
@@ -24,15 +24,15 @@ class EmbeddedObjectField extends FormField {
 		}
 		parent::setValue($value);
 	}
-	
+
 	public function getMessage() {
 		return $this->message;
 	}
-	
+
 	public function FieldHolder($properties = array()) {
 		Requirements::css(LINKABLE_PATH . '/css/embeddedobjectfield.css');
 		Requirements::javascript(LINKABLE_PATH . '/javascript/embeddedobjectfield.js');
-		
+
 		if ($this->object && $this->object->ID) {
 			$properties['SourceURL'] = TextField::create($this->getName() . '[sourceurl]', '')->setAttribute('placeholder', _t('Linkable.SOURCEURL', 'Source URL'));
 
@@ -70,7 +70,7 @@ class EmbeddedObjectField extends FormField {
 	public function saveInto(DataObjectInterface $record) {
 		$val = $this->Value();
 		$field = $this->getName() . 'ID';
-		
+
 		if (!strlen($val['sourceurl']) && $this->object) {
 			if($this->object->exists()){
 				$this->object->delete();
@@ -82,16 +82,16 @@ class EmbeddedObjectField extends FormField {
  		if (!$this->object) {
 			$this->object = EmbeddedObject::create();
 		}
-		
+
 		$props = array_keys(Config::inst()->get('EmbeddedObject', 'db'));
 		foreach ($props as $prop) {
-			$this->object->$prop = isset($val[strtolower($prop)]) ? $val[strtolower($prop)] : null;	
+			$this->object->$prop = isset($val[strtolower($prop)]) ? $val[strtolower($prop)] : null;
 		}
 
 		$this->object->write();
 		$record->$field = $this->object->ID;
 	}
-	
+
 	public function update(SS_HTTPRequest $request) {
 		if (!SecurityToken::inst()->checkRequest($request)) {
 			return '';
@@ -103,7 +103,7 @@ class EmbeddedObjectField extends FormField {
 			if ($info) {
 				$object = EmbeddedObject::create();
 				$object->setFromEmbed($info);
-				
+
 				$this->object = $object;
 				// needed to make sure the check in FieldHolder works out
 				$object->ID = -1;
