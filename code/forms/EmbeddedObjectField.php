@@ -72,7 +72,7 @@ class EmbeddedObjectField extends FormField {
 		$field = $this->getName() . 'ID';
 
 		if (!strlen($val['sourceurl']) && $this->object) {
-			if($this->object->exists()){
+			if($this->object->exists()) {
 				$this->object->delete();
 			}
 			$record->$field = 0;
@@ -112,7 +112,7 @@ class EmbeddedObjectField extends FormField {
 				$this->message = _t('EmbeddedObjectField.ERROR', 'Could not look up provided URL: ' . Convert::raw2xml($url));
 				return $this->FieldHolder();
 			}
-		}else{
+		} else {
 			$this->object = null;
 			return $this->FieldHolder();
 		}
