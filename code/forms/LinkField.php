@@ -28,7 +28,7 @@ class LinkField extends TextField{
 	);
 
 
-	public function Field($properties = array()){
+	public function Field($properties = array()) {
 		Requirements::javascript(LINKABLE_PATH . '/javascript/linkfield.js');
 		return parent::Field();
 	}
@@ -39,17 +39,17 @@ class LinkField extends TextField{
 	 *
 	 * @return Form
 	 **/
-	public function LinkForm(){
+	public function LinkForm() {
 		$link = $this->getLinkObject();
 
 		$action = FormAction::create('doSaveLink', _t('Linkable.SAVE', 'Save'))->setUseButtonTag('true');
 
-		if(!$this->isFrontend){
+		if(!$this->isFrontend) {
 			$action->addExtraClass('ss-ui-action-constructive')->setAttribute('data-icon', 'accept');
 		}
 
 		$link = null;
-		if($linkID = (int) $this->request->getVar('LinkID')){
+		if($linkID = (int) $this->request->getVar('LinkID')) {
 			$link = Link::get()->byID($linkID);
 		}
 		$link = $link ? $link : singleton('Link');
@@ -61,7 +61,7 @@ class LinkField extends TextField{
 		$actions = FieldList::create($action);
 		$form = Form::create($this, 'LinkForm', $fields, $actions);
 
-		if($link){
+		if($link) {
 			$form->loadDataFrom($link);
 			$fields->push(HiddenField::create('LinkID', 'LinkID', $link->ID));
 		}
@@ -77,7 +77,7 @@ class LinkField extends TextField{
 	 * Returns field template to update the interface
 	 * @return string
 	 **/
-	public function doSaveLink($data, $form){
+	public function doSaveLink($data, $form) {
 		$link = $this->getLinkObject() ? $this->getLinkObject() : Link::create();
 		$form->saveInto($link);
 		try {
@@ -97,7 +97,7 @@ class LinkField extends TextField{
 	 *
 	 * @return string
 	 **/
-	public function doRemoveLink(){
+	public function doRemoveLink() {
 		$this->setValue('');
 		return $this->FieldHolder();
 	}
@@ -108,16 +108,16 @@ class LinkField extends TextField{
 	 *
 	 * @return Link
 	 **/
-	public function getLinkObject(){
+	public function getLinkObject() {
 		$requestID = Controller::curr()->request->requestVar('LinkID');
 
-		if($requestID == '0'){
+		if($requestID == '0') {
 			return;
 		}
 
-		if(!$this->linkObject){
+		if(!$this->linkObject) {
 			$id = $this->Value() ? $this->Value() : $requestID;
-			if((int) $id){
+			if((int) $id) {
 				$this->linkObject = Link::get()->byID($id);
 			}
 		}
@@ -130,17 +130,17 @@ class LinkField extends TextField{
 	 *
 	 * @return string
 	 **/
-	public function LinkFormHTML(){
+	public function LinkFormHTML() {
 		return $this->LinkForm()->forTemplate();
 	}
 
 
-	public function getIsFrontend(){
+	public function getIsFrontend() {
 		return $this->isFrontend;
 	}
 
 
-	public function setIsFrontend($bool){
+	public function setIsFrontend($bool) {
 		$this->isFrontend = $bool;
 		return $this->this;
 	}

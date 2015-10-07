@@ -47,7 +47,7 @@ class Link extends DataObject{
 	);
 
 
-	public function getCMSFields(){
+	public function getCMSFields() {
 		$fields = $this->scaffoldFormFields(array(
 			// Don't allow has_many/many_many relationship editing before the record is first saved
 			'includeRelations' => ($this->ID > 0),
@@ -83,7 +83,7 @@ class Link extends DataObject{
 		$fields->dataFieldByName('URL')->displayIf("Type")->isEqualTo("URL");
 		$fields->dataFieldByName('Email')->setTitle(_t('Linkable.EMAILADDRESS', 'Email Address'))->displayIf("Type")->isEqualTo("Email");
 
-		if($this->SiteTreeID && !$this->SiteTree()->isPublished()){
+		if($this->SiteTreeID && !$this->SiteTree()->isPublished()) {
 			$fields->dataFieldByName('SiteTreeID')->setRightTitle(_t('Linkable.DELETEDWARNING', 'Warning: The selected page appears to have been deleted or unpublished. This link may not appear or may be broken in the frontend'));
 		}
 
@@ -101,20 +101,20 @@ class Link extends DataObject{
 	 * If the title is empty, set it to getLinkURL()
 	 * @return string
 	 **/
-	public function onAfterWrite(){
+	public function onAfterWrite() {
 		parent::onAfterWrite();
-		if(!$this->Title){
-			if($this->Type == 'URL' || $this->Type == 'Email'){
+		if(!$this->Title) {
+			if($this->Type == 'URL' || $this->Type == 'Email') {
 				$this->Title = $this->{$this->Type};
-			}elseif($this->Type == 'SiteTree'){
+			}elseif($this->Type == 'SiteTree') {
 				$this->Title = $this->SiteTree()->MenuTitle;
-			}else{
-				if($this->Type && $component = $this->getComponent($this->Type)){
+			} else {
+				if($this->Type && $component = $this->getComponent($this->Type)) {
 					$this->Title = $component->Title;
 				}
 			}
 
-			if(!$this->Title){
+			if(!$this->Title) {
 				$this->Title = 'Link-' . $this->ID;
 			}
 
@@ -131,7 +131,7 @@ class Link extends DataObject{
 	 * @param string $class CSS classes.
 	 * @return Link
 	 **/
-	public function setCSSClass($class){
+	public function setCSSClass($class) {
 		$this->cssClass = $class;
 		return $this;
 	}
@@ -141,7 +141,7 @@ class Link extends DataObject{
 	 * Gets the html class attribute for this link.
 	 * @return string
 	 **/
-	public function getClassAttr(){
+	public function getClassAttr() {
 		$class = $this->cssClass ? Convert::raw2att( $this->cssClass ) : '';
 		return $class ? "class='$class'" : '';
 	}
@@ -151,8 +151,8 @@ class Link extends DataObject{
 	 * Renders an HTML anchor tag for this link
 	 * @return string
 	 **/
-	public function forTemplate(){
-		if($url = $this->getLinkURL()){
+	public function forTemplate() {
+		if($url = $this->getLinkURL()) {
 			$title = $this->Title ? $this->Title : $url; // legacy
 			$target = $this->getTargetAttr();
 			$class = $this->getClassAttr();
@@ -165,21 +165,21 @@ class Link extends DataObject{
 	 * Works out what the URL for this link should be based on it's Type
 	 * @return string
 	 **/
-	public function getLinkURL(){
+	public function getLinkURL() {
 		if(!$this->ID) return;
-		if($this->Type == 'URL'){
+		if($this->Type == 'URL') {
 			return $this->URL;
-		}elseif($this->Type == 'Email'){
+		}elseif($this->Type == 'Email') {
 			return $this->Email ? "mailto:$this->Email" : null;
-		}else{
-			if($this->Type && $component = $this->getComponent($this->Type)){
-				if(!$component->exists()){
+		} else {
+			if($this->Type && $component = $this->getComponent($this->Type)) {
+				if(!$component->exists()) {
 					return false;
 				}
 
-				if($component->hasMethod('Link')){
+				if($component->hasMethod('Link')) {
 					return $component->Link() . $this->Anchor;
-				}else{
+				} else {
 					return "Please implement a Link() method on your dataobject \"$this->Type\"";
 				}
 			}
@@ -191,7 +191,7 @@ class Link extends DataObject{
      	 * Gets the html target attribute for the anchor tag
      	 * @return string
      	 **/
-    	public function getTargetAttr(){
+    	public function getTargetAttr() {
         	return $this->OpenInNewWindow ? "target='_blank'" : '';
 	}
 
@@ -200,7 +200,7 @@ class Link extends DataObject{
 	 * Gets the description label of this links type
 	 * @return string
 	 **/
-	public function getLinkType(){
+	public function getLinkType() {
 		$types = $this->config()->get('types');
 		return isset($types[$this->Type]) ? $types[$this->Type] : null;
 	}
@@ -210,32 +210,32 @@ class Link extends DataObject{
 	 * Validate
 	 * @return ValidationResult
 	 **/
-	protected function validate(){
+	protected function validate() {
 		$valid = true;
 		$message = null;
-		if($this->Type == 'URL'){
-			if($this->URL ==''){
+		if($this->Type == 'URL') {
+			if($this->URL =='') {
 				$valid = false;
 				$message = _t('Linkable.VALIDATIONERROR_EMPTYURL', 'You must enter a URL for a link type of "URL"');
-			}else{
+			} else {
 				$allowedFirst = array('#', '/');
-				if(!in_array(substr($this->URL, 0, 1), $allowedFirst) && !filter_var($this->URL, FILTER_VALIDATE_URL)){
+				if(!in_array(substr($this->URL, 0, 1), $allowedFirst) && !filter_var($this->URL, FILTER_VALIDATE_URL)) {
 					$valid = false;
 					$message = _t('Linkable.VALIDATIONERROR_VALIDURL', 'Please enter a valid URL. Be sure to include http:// for an external URL. Or begin your internal url/anchor with a "/" character');
 				}
 			}
-		}elseif($this->Type == 'Email'){
-			if($this->Email ==''){
+		}elseif($this->Type == 'Email') {
+			if($this->Email =='') {
 				$valid = false;
 				$message = _t('Linkable.VALIDATIONERROR_EMPTYEMAIL', 'You must enter an Email Address for a link type of "Email"');
-			}else{
-				if(!filter_var($this->Email, FILTER_VALIDATE_EMAIL)){
+			} else {
+				if(!filter_var($this->Email, FILTER_VALIDATE_EMAIL)) {
 					$valid = false;
 					$message = _t('Linkable.VALIDATIONERROR_VALIDEMAIL', 'Please enter a valid Email address');
 				}
 			}
-		}else{
-			if($this->Type && empty($this->{$this->Type.'ID'})){
+		} else {
+			if($this->Type && empty($this->{$this->Type.'ID'})) {
 				$valid = false;
 				$message = _t('Linkable.VALIDATIONERROR_OBJECT', "Please select a {value} object to link to", array('value' => $this->Type));
 			}
