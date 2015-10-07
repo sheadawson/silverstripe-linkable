@@ -14,6 +14,9 @@ class Link extends DataObject{
 	 */
 	protected $cssClass;
 
+	/**
+	 * @var array
+	 */
 	private static $db = array(
 		'Title' => 'Varchar(255)',
 		'Type' => 'Varchar',
@@ -23,11 +26,17 @@ class Link extends DataObject{
 		'OpenInNewWindow' => 'Boolean'
 	);
 
+	/**
+	 * @var array
+	 */
 	private static $has_one = array(
 		'File' => 'File',
 		'SiteTree' => 'SiteTree'
 	);
 
+	/**
+	 * @var array
+	 */
 	private static $summary_fields = array(
 		'Title',
 		'LinkType',
@@ -37,6 +46,7 @@ class Link extends DataObject{
 	/**
 	 * A map of object types that can be linked to
 	 * Custom dataobjects can be added to this
+	 *
 	 * @var array
 	 **/
 	private static $types = array(
@@ -46,7 +56,9 @@ class Link extends DataObject{
 		'SiteTree' => 'Page on this website'
 	);
 
-
+	/**
+	 * @return FieldList
+	 */
 	public function getCMSFields() {
 		$fields = $this->scaffoldFormFields(array(
 			// Don't allow has_many/many_many relationship editing before the record is first saved
@@ -55,16 +67,16 @@ class Link extends DataObject{
 			'ajaxSafe' => true
 		));
 
-        $types = $this->config()->get('types');
-        $i18nTypes = array();
-        foreach ($types as $key => $label) {
-            $i18nTypes[$key] = _t('Linkable.TYPE'.strtoupper($key), $label);
-        }
+		$types = $this->config()->get('types');
+		$i18nTypes = array();
+		foreach ($types as $key => $label) {
+			$i18nTypes[$key] = _t('Linkable.TYPE'.strtoupper($key), $label);
+		}
 
-        $fields->removeByName('SiteTreeID');
-        // seem to need to remove both of these for different SS versions...
-        $fields->removeByName('FileID');
-        $fields->removeByName('File');
+		$fields->removeByName('SiteTreeID');
+		// seem to need to remove both of these for different SS versions...
+		$fields->removeByName('FileID');
+		$fields->removeByName('File');
 
 		$fields->dataFieldByName('Title')->setTitle(_t('Linkable.TITLE', 'Title'))->setRightTitle(_t('Linkable.OPTIONALTITLE', 'Optional. Will be auto-generated from link if left blank'));
 		$fields->replaceField('Type', DropdownField::create('Type', _t('Linkable.LINKTYPE', 'Link Type'), $i18nTypes)->setEmptyString(' '), 'OpenInNewWindow');
@@ -99,6 +111,7 @@ class Link extends DataObject{
 
 	/**
 	 * If the title is empty, set it to getLinkURL()
+	 *
 	 * @return string
 	 **/
 	public function onAfterWrite() {
@@ -120,14 +133,11 @@ class Link extends DataObject{
 
 			$this->write();
 		}
-
-
-
 	}
-
 
 	/**
 	 * Add CSS classes.
+	 *
 	 * @param string $class CSS classes.
 	 * @return Link
 	 **/
@@ -139,6 +149,7 @@ class Link extends DataObject{
 
 	/**
 	 * Gets the html class attribute for this link.
+	 *
 	 * @return string
 	 **/
 	public function getClassAttr() {
@@ -149,6 +160,7 @@ class Link extends DataObject{
 
 	/**
 	 * Renders an HTML anchor tag for this link
+	 *
 	 * @return string
 	 **/
 	public function forTemplate() {
@@ -163,6 +175,7 @@ class Link extends DataObject{
 
 	/**
 	 * Works out what the URL for this link should be based on it's Type
+	 *
 	 * @return string
 	 **/
 	public function getLinkURL() {
@@ -186,18 +199,18 @@ class Link extends DataObject{
 		}
 	}
 
-
 	/**
-     	 * Gets the html target attribute for the anchor tag
-     	 * @return string
-     	 **/
-    	public function getTargetAttr() {
-        	return $this->OpenInNewWindow ? "target='_blank'" : '';
+	 * Gets the html target attribute for the anchor tag
+	 *
+	 * @return string
+	 **/
+	public function getTargetAttr() {
+		return $this->OpenInNewWindow ? "target='_blank'" : '';
 	}
-
 
 	/**
 	 * Gets the description label of this links type
+	 *
 	 * @return string
 	 **/
 	public function getLinkType() {
@@ -205,9 +218,9 @@ class Link extends DataObject{
 		return isset($types[$this->Type]) ? $types[$this->Type] : null;
 	}
 
-
 	/**
 	 * Validate
+	 *
 	 * @return ValidationResult
 	 **/
 	protected function validate() {
@@ -245,7 +258,4 @@ class Link extends DataObject{
 		$this->extend('validate', $result);
 		return $result;
 	}
-
-
-
 }
