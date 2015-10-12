@@ -18,10 +18,10 @@
 	<div class="embedThumb">
 	$ThumbImage
 	</div>
-	
+
 	<div class="embeddedObjectProperties">
 		$ObjectTitle.SmallFieldHolder
-		
+
 		<div class="dimensions">
 			<div class="widthHeightField">
 			$Width.SmallFieldHolder
@@ -30,11 +30,11 @@
 			$Height.SmallFieldHolder
 			</div>
 		</div>
-		
+
 		$ObjectDescription.SmallFieldHolder
 
 		$ExtraClass.SmallFieldHolder
-		
+
 		$ThumbURL.SmallFieldHolder
 		$Type.SmallFieldHolder
 		$EmbedHTML.SmallFieldHolder
