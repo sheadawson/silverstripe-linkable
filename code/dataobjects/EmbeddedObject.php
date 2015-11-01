@@ -64,7 +64,8 @@ class EmbeddedObject extends DataObject {
 		$this->ThumbURL = $info->getImage();
 		$this->Description = $info->getDescription() ? $info->getDescription(): $info->getTitle();
 		$this->Type = $info->getType();
-		$this->EmbedHTML = $info->getCode();
+		$embed = $info->getCode();
+		$this->EmbedHTML = $embed ? $embed : $this->EmbedHTML;
 	}
 
 	public function forTemplate() {

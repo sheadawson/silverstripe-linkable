@@ -12,6 +12,8 @@ class EmbeddedObjectField extends FormField {
 	private static $allowed_actions = array(
 		'update'
 	);
+	
+	protected $editableEmbedCode = false;
 
 	protected $object;
 
@@ -23,6 +25,11 @@ class EmbeddedObjectField extends FormField {
 			parent::setValue($value->toMap());
 		}
 		parent::setValue($value);
+	}
+	
+	public function setEditableEmbedCode($v) {
+		$this->editableEmbedCode = $v;
+		return $this;
 	}
 
 	public function getMessage() {
@@ -42,7 +49,12 @@ class EmbeddedObjectField extends FormField {
 				$properties['Height'] = TextField::create($this->getName() . '[height]', _t('Linkable.HEIGHT', 'Height'));
 				$properties['ThumbURL'] = HiddenField::create($this->getName() . '[thumburl]', '');
 				$properties['Type'] = HiddenField::create($this->getName() . '[type]', '');
-				$properties['EmbedHTML'] = HiddenField::create($this->getName() . '[embedhtml]', '');
+				if ($this->editableEmbedCode) {
+					$properties['EmbedHTML'] = TextareaField::create($this->getName() . '[embedhtml]', 'Embed code');
+				} else {
+					$properties['EmbedHTML'] = HiddenField::create($this->getName() . '[embedhtml]', '');
+				}
+				
 				$properties['ObjectDescription'] = TextAreaField::create($this->getName() . '[description]', _t('Linkable.DESCRIPTION', 'Description'));
 				$properties['ExtraClass'] = TextField::create($this->getName() . '[extraclass]', _t('Linkable.CSSCLASS', 'CSS class'));
 
@@ -98,7 +110,6 @@ class EmbeddedObjectField extends FormField {
 		}
 		$url = $request->postVar('URL');
 		if (strlen($url)) {
-			$info = Oembed::get_oembed_from_url($url);
 			$info = Embed\Embed::create($url);
 			if ($info) {
 				$object = EmbeddedObject::create();
