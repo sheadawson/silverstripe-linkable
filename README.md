@@ -1,9 +1,11 @@
-# SilverStripe Linkable
+# SilverStripe Linkable 1.2
 
 ## Requirements
 
 * SilverStripe 3.2.x
 * [Display Logic](https://github.com/unclecheese/silverstripe-display-logic)
+
+See 1.1 branch/releases for SilverStripe 3.1 support
 
 ## Maintainers
 
