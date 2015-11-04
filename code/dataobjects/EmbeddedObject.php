@@ -19,7 +19,7 @@ class EmbeddedObject extends DataObject {
 		'ExtraClass'		=> 'Varchar(64)',
 		'EmbedHTML'			=> 'Text',
 	);
-	
+
 	public function Embed() {
 		$options = array(
 			'width'	=> $this->Width,
@@ -28,35 +28,35 @@ class EmbeddedObject extends DataObject {
 		$this->setFromURL($this->SourceURL);
 		return $this;
 	}
-	
+
 	public function onBeforeWrite() {
 		$changes = $this->getChangedFields();
-		
+
 		if (isset($changes['Width']) && $changes['Width']['before']) {
 			$this->updateEmbedHTML();
 		}
-		
+
 		if (isset($changes['Height']) && $changes['Height']['before']) {
 			$this->updateEmbedHTML();
 		}
-		
+
 		parent::onBeforeWrite();
-		
+
 	}
 
 	public function updateEmbedHTML() {
 		$this->setFromURL($this->SourceURL);
 	}
-	
+
 	public function setFromURL($url) {
-		if($url){
+		if($url) {
 			$info = Embed\Embed::create($url); // , array('image' => array('minImageWidth' => $this->Width, 'minImageHeight' => $this->Height)));
 			$this->setFromEmbed($info);
 		}
 	}
-	
+
 	public function setFromEmbed(\Embed\Adapters\Adapter $info) {
-		
+
 		$this->Title = $info->getTitle();
 		$this->SourceURL = $info->getUrl();
 		$this->Width = $info->getWidth();
@@ -64,7 +64,8 @@ class EmbeddedObject extends DataObject {
 		$this->ThumbURL = $info->getImage();
 		$this->Description = $info->getDescription() ? $info->getDescription(): $info->getTitle();
 		$this->Type = $info->getType();
-		$this->EmbedHTML = $info->getCode();
+		$embed = $info->getCode();
+		$this->EmbedHTML = $embed ? $embed : $this->EmbedHTML;
 	}
 
 	public function forTemplate() {

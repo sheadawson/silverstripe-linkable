@@ -23,6 +23,9 @@
 		"embed/embed": "~2.2.2"
 	},
 	"extra": {
-		"installer-name": "linkable"
+		"installer-name": "linkable",
+		"branch-alias": {
+			"dev-master": "1.2.x-dev"
+		}
 	}
 }
