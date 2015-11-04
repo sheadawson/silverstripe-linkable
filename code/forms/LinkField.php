@@ -28,7 +28,7 @@ class LinkField extends TextField{
 	);
 
 
-	public function Field($properties = array()){
+	public function Field($properties = array()) {
 		Requirements::javascript(LINKABLE_PATH . '/javascript/linkfield.js');
 		return parent::Field();
 	}
@@ -39,29 +39,29 @@ class LinkField extends TextField{
 	 *
 	 * @return Form
 	 **/
-	public function LinkForm(){
+	public function LinkForm() {
 		$link = $this->getLinkObject();
 
 		$action = FormAction::create('doSaveLink', _t('Linkable.SAVE', 'Save'))->setUseButtonTag('true');
 
-		if(!$this->isFrontend){
+		if(!$this->isFrontend) {
 			$action->addExtraClass('ss-ui-action-constructive')->setAttribute('data-icon', 'accept');
 		}
 
 		$link = null;
-		if($linkID = (int)$this->request->getVar('LinkID')){
+		if($linkID = (int) $this->request->getVar('LinkID')) {
 			$link = Link::get()->byID($linkID);
 		}
 		$link = $link ? $link : singleton('Link');
 
 		$fields = $link->getCMSFields();
-		
+
 		$title = $link ? _t('Linkable.EDITLINK', 'Edit Link') : _t('Linkable.ADDLINK', 'Add Link');
 		$fields->insertBefore(HeaderField::create('LinkHeader', $title), _t('Linkable.TITLE', 'Title'));
 		$actions = FieldList::create($action);
 		$form = Form::create($this, 'LinkForm', $fields, $actions);
 
-		if($link){
+		if($link) {
 			$form->loadDataFrom($link);
 			$fields->push(HiddenField::create('LinkID', 'LinkID', $link->ID));
 		}
@@ -75,13 +75,13 @@ class LinkField extends TextField{
 	/**
 	 * Either updates the current link or creates a new one
 	 * Returns field template to update the interface
-	 * @return String
+	 * @return string
 	 **/
-	public function doSaveLink($data, $form){
+	public function doSaveLink($data, $form) {
 		$link = $this->getLinkObject() ? $this->getLinkObject() : Link::create();
 		$form->saveInto($link);
 		try {
-			$link->write();	
+			$link->write();
 		} catch (ValidationException $e) {
 			$form->sessionMessage($e->getMessage(), 'bad');
 			return $form->forTemplate();
@@ -95,31 +95,31 @@ class LinkField extends TextField{
 	/**
 	 * Delete link action - TODO
 	 *
-	 * @return String
+	 * @return string
 	 **/
-	public function doRemoveLink(){
+	public function doRemoveLink() {
 		$this->setValue('');
 		return $this->FieldHolder();
 	}
 
-	
+
 	/**
 	 * Returns the current link object
 	 *
 	 * @return Link
 	 **/
-	public function getLinkObject(){
+	public function getLinkObject() {
 		$requestID = Controller::curr()->request->requestVar('LinkID');
-		
-		if($requestID == '0'){
+
+		if($requestID == '0') {
 			return;
 		}
 
-		if(!$this->linkObject){
+		if(!$this->linkObject) {
 			$id = $this->Value() ? $this->Value() : $requestID;
-			if((int)$id){
+			if((int) $id) {
 				$this->linkObject = Link::get()->byID($id);
-			}		
+			}
 		}
 		return $this->linkObject;
 	}
@@ -128,19 +128,19 @@ class LinkField extends TextField{
 	/**
 	 * Returns the HTML of the LinkForm for the dialog
 	 *
-	 * @return String
+	 * @return string
 	 **/
-	public function LinkFormHTML(){
+	public function LinkFormHTML() {
 		return $this->LinkForm()->forTemplate();
 	}
 
 
-	public function getIsFrontend(){
+	public function getIsFrontend() {
 		return $this->isFrontend;
 	}
 
 
-	public function setIsFrontend($bool){
+	public function setIsFrontend($bool) {
 		$this->isFrontend = $bool;
 		return $this->this;
 	}

@@ -13,7 +13,7 @@
 			$.post($(this).data('href'), params, function (data) {
 				button.val(buttonText).removeAttr('disabled');
 				if (data && data.length) {
-					container.html($(data).html());
+					container.html(data);
 					delete container;
 				}
 			})
