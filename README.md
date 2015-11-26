@@ -24,18 +24,20 @@ A Link Object can be linked to a URL or, an internal Page or File in the SilverS
 ### Example usage
 
 ```php
-class Page extends SiteTree{
+class Page extends SiteTree {
 	
-	static $has_one = array(
+	private static $has_one = array(
 		'ExampleLink' => 'Link'
 	);		
 
 	public function getCMSFields(){
 		$fields = parent::getCMSFields();
+		
 		$fields->addFieldToTab('Root.Link', LinkField::create('ExampleLinkID', 'Link to page or file'));
+		
+		return $fields;
 	}
-
-	...
+}
 ```
 
 In your template, you can render the links anchor tag with
@@ -57,18 +59,20 @@ Use the EmbeddedObject/Field to easily add oEmbed content to a DataObject or Pag
 ### Example usage
 
 ```php
-class Page extends SiteTree{
+class Page extends SiteTree {
 	
-	static $has_one = array(
+	private static $has_one = array(
 		'Video' => 'EmbeddedObject'
 	);		
 
 	public function getCMSFields(){
 		$fields = parent::getCMSFields();
+		
 		$fields->addFieldToTab('Root.Video', EmbeddedObjectField::create('Video', 'Video from oEmbed URL', $this->Video()));
+		
 		return $fields;
 	}
-
+}
 	...
 ```
 
