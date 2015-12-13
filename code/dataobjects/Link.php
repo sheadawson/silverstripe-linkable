@@ -168,7 +168,12 @@ class Link extends DataObject{
 			$title = $this->Title ? $this->Title : $url; // legacy
 			$target = $this->getTargetAttr();
 			$class = $this->getClassAttr();
-			return "<a href='$url' $target $class>$title</a>";
+
+			$link = "<a href='$url' $target $class>$title</a>";
+
+			$this->extend('updateLinkTemplate', $this, $link);
+
+		  	return $link;
 		}
 	}
 
