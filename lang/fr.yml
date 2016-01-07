@@ -1,0 +1,38 @@
+fr:
+  EmbeddedObject:
+    PLURALNAME: 'Objets Encapsulés'
+    SINGULARNAME: 'Objet Encapsulé'
+  Link:
+    PLURALNAME: Liens
+    SINGULARNAME: Lien
+  Linkable:
+    ADDLINK: 'Ajouter Lien'
+    ANCHOR: Ancre
+    ANCHORINFO: "Inclure # au début du nom de l'ancre"
+    CSSCLASS: 'Classe CSS'
+    DELETEDWARNING: "Attention: La page sélectionné semble supprimée ou dépubliée. Ce lien pourrait ne pas fonctionner ou ne pas s'afficher sur le site."
+    DESCRIPTION: Description
+    EDIT: Éditer
+    EDITLINK: 'Éditer le Lien'
+    EMAILADDRESS: 'Adresse Mail'
+    FILE: Fichier
+    HEIGHT: Hauteur
+    INSPECT: Inspecter
+    LINKTYPE: 'Type de Lien'
+    OPENINNEWWINDOW: 'Ouvrir le lien dans une nouvelle fenêtre'
+    OPTIONALTITLE: 'Optionnel. Sera auto généré à partir du lien si laissé vide.'
+    PAGE: Page
+    REMOVE: Retirer
+    SAVE: Sauvegarder
+    SOURCEURL: 'URL Source'
+    TITLE: Titre
+    TYPEURL: 'URL'
+    TYPEEMAIL: 'Adresse Email'
+    TYPEFILE: 'Un Fichier sur ce site'
+    TYPESITETREE: 'Une Page sur ce site'
+    VALIDATIONERROR_EMPTYEMAIL: 'Vous devez entrer une adresse Email pour un type de lien "Email"'
+    VALIDATIONERROR_EMPTYURL: 'Vous devez entrer une URL pour un type de lien "URL"'
+    VALIDATIONERROR_OBJECT: 'Merci de sélectionner une {value} à lier'
+    VALIDATIONERROR_VALIDEMAIL: "Merci d'entrer ne adreese Email valide"
+    VALIDATIONERROR_VALIDURL: ". Assurez-vous d'inclure http:// pour une URL externe. Ou faite précéder votre URL interne/ancre avec le caractère '/'"
+    WIDTH: Largeur
