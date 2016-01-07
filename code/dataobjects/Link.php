@@ -102,7 +102,7 @@ class Link extends DataObject
         }
 
         $fields->addFieldToTab('Root.Main', $anchor = TextField::create('Anchor', _t('Linkable.ANCHOR', 'Anchor')), 'OpenInNewWindow');
-        $anchor->setRightTitle('Include # at the start of your anchor name');
+        $anchor->setRightTitle(_t('Linkable.ANCHORINFO', 'Include # at the start of your anchor name'));
         $anchor->displayIf("Type")->isEqualTo("SiteTree");
 
         $this->extend('updateCMSFields', $fields);
@@ -231,7 +231,7 @@ class Link extends DataObject
     public function getLinkType()
     {
         $types = $this->config()->get('types');
-        return isset($types[$this->Type]) ? $types[$this->Type] : null;
+        return isset($types[$this->Type]) ? _t('Linkable.TYPE'.strtoupper($this->Type), $types[$this->Type]) : null;
     }
 
     /**
