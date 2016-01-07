@@ -27,7 +27,7 @@ fr:
     SOURCEURL: 'URL Source'
     TITLE: Titre
     TYPEURL: 'URL'
-    TYPEEMAIL: 'Adreese Email'
+    TYPEEMAIL: 'Adresse Email'
     TYPEFILE: 'Un Fichier sur ce site'
     TYPESITETREE: 'Une Page sur ce site'
     VALIDATIONERROR_EMPTYEMAIL: 'Vous devez entrer une adresse Email pour un type de lien "Email"'
