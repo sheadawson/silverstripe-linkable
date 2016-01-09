@@ -9,7 +9,7 @@
 			var button = this;
 			var buttonText = button.val();
 			button.val('Loading').prop('disabled', 'disabled');
-			
+
 			$.post($(this).data('href'), params, function (data) {
 				button.val(buttonText).removeAttr('disabled');
 				if (data && data.length) {

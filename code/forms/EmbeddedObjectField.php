@@ -13,7 +13,7 @@ class EmbeddedObjectField extends FormField
     private static $allowed_actions = array(
         'update'
     );
-    
+
     protected $editableEmbedCode = false;
 
     protected $object;
@@ -28,7 +28,7 @@ class EmbeddedObjectField extends FormField
         }
         parent::setValue($value);
     }
-    
+
     public function setEditableEmbedCode($v)
     {
         $this->editableEmbedCode = $v;
@@ -59,7 +59,7 @@ class EmbeddedObjectField extends FormField
                 } else {
                     $properties['EmbedHTML'] = HiddenField::create($this->getName() . '[embedhtml]', '');
                 }
-                
+
                 $properties['ObjectDescription'] = TextAreaField::create($this->getName() . '[description]', _t('Linkable.DESCRIPTION', 'Description'));
                 $properties['ExtraClass'] = TextField::create($this->getName() . '[extraclass]', _t('Linkable.CSSCLASS', 'CSS class'));
 
