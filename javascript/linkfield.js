@@ -62,7 +62,9 @@ jQuery.entwine("linkfield", function($) {
 				return false;
 			});
 		},
-
+		onunmatch: function () {
+			$('.linkfield-dialog').remove();
+		},
 		showDialog: function(url) {
 			var dlg = this.getDialog();
 
@@ -98,5 +100,3 @@ jQuery.entwine("linkfield", function($) {
 		},
 	});
 });
-
-
