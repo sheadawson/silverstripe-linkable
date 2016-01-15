@@ -1,31 +1,35 @@
 {
-	"name": "sheadawson/silverstripe-linkable",
-	"type": "silverstripe-module",
-	"description": "A couple of handy form fields and objects for managing external and internal links on DataObjects",
-	"license": "BSD-3-Clause",
-	"keywords": ["silverstripe", "cms", "link"],
-	"homepage": "http://github.com/sheadawson/silverstripe-linkable",
-	"authors": [
-		{
-			"name": "Shea Dawson",
-			"email": "shea@silverstripe.com.au"
-		},
-		{
-			"name": "Marcus Nyeholt",
-			"email": "marcus@silverstripe.com.au"
-		}
-	],
-	"require": {
-		"php": ">=5.3.2",
-		"silverstripe/framework": "^3.2",
-		"silverstripe/cms": "^3.2",
-		"unclecheese/display-logic": "^1",
-		"embed/embed": "~2.2.2"
-	},
-	"extra": {
-		"installer-name": "linkable",
-		"branch-alias": {
-			"dev-master": "1.2.x-dev"
-		}
-	}
+    "name": "sheadawson/silverstripe-linkable",
+    "type": "silverstripe-module",
+    "description": "A couple of handy form fields and objects for managing external and internal links on DataObjects",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "silverstripe",
+        "cms",
+        "link"
+    ],
+    "homepage": "http://github.com/sheadawson/silverstripe-linkable",
+    "authors": [
+        {
+            "name": "Shea Dawson",
+            "email": "shea@silverstripe.com.au"
+        },
+        {
+            "name": "Marcus Nyeholt",
+            "email": "marcus@silverstripe.com.au"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2",
+        "silverstripe/framework": "^3.2",
+        "silverstripe/cms": "^3.2",
+        "unclecheese/display-logic": "^1",
+        "embed/embed": "~2.2.2"
+    },
+    "extra": {
+        "installer-name": "linkable",
+        "branch-alias": {
+            "dev-master": "1.2.x-dev"
+        }
+    }
 }
