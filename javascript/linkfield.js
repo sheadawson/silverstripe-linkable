@@ -37,14 +37,14 @@ jQuery.entwine("linkfield", function($) {
 				position: 	{ my: "center", at: "center", of: window }
 			});
 
-			// submit button loading state while form is submitting 
+			// submit button loading state while form is submitting
 			this.getDialog().on("click", "button", function() {
 				$(this).addClass("loading ui-state-disabled");
 			});
 
 			// handle dialog form submission
 			this.getDialog().on("submit", "form", function() {
-				
+
 				var dlg = self.getDialog().dialog(),
 					options = {};
 
@@ -62,7 +62,9 @@ jQuery.entwine("linkfield", function($) {
 				return false;
 			});
 		},
-
+		onunmatch: function () {
+            $('.linkfield-dialog.ui-dialog-content').remove();
+		},
 		showDialog: function(url) {
 			var dlg = this.getDialog();
 
@@ -98,5 +100,3 @@ jQuery.entwine("linkfield", function($) {
 		},
 	});
 });
-
-

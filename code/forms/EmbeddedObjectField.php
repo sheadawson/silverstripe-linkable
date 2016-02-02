@@ -7,125 +7,132 @@
  * @license BSD License http://www.silverstripe.org/bsd-license
  * @author <marcus@silverstripe.com.au>
  **/
-class EmbeddedObjectField extends FormField {
+class EmbeddedObjectField extends FormField
+{
 
-	private static $allowed_actions = array(
-		'update'
-	);
-	
-	protected $editableEmbedCode = false;
+    private static $allowed_actions = array(
+        'update'
+    );
 
-	protected $object;
+    protected $editableEmbedCode = false;
 
-	protected $message;
+    protected $object;
 
-	public function setValue($value) {
-		if ($value instanceof EmbeddedObject) {
-			$this->object = $value;
-			parent::setValue($value->toMap());
-		}
-		parent::setValue($value);
-	}
-	
-	public function setEditableEmbedCode($v) {
-		$this->editableEmbedCode = $v;
-		return $this;
-	}
+    protected $message;
 
-	public function getMessage() {
-		return $this->message;
-	}
+    public function setValue($value)
+    {
+        if ($value instanceof EmbeddedObject) {
+            $this->object = $value;
+            parent::setValue($value->toMap());
+        }
+        parent::setValue($value);
+    }
 
-	public function FieldHolder($properties = array()) {
-		Requirements::css(LINKABLE_PATH . '/css/embeddedobjectfield.css');
-		Requirements::javascript(LINKABLE_PATH . '/javascript/embeddedobjectfield.js');
+    public function setEditableEmbedCode($v)
+    {
+        $this->editableEmbedCode = $v;
+        return $this;
+    }
 
-		if ($this->object && $this->object->ID) {
-			$properties['SourceURL'] = TextField::create($this->getName() . '[sourceurl]', '')->setAttribute('placeholder', _t('Linkable.SOURCEURL', 'Source URL'));
+    public function getMessage()
+    {
+        return $this->message;
+    }
 
-			if (strlen($this->object->SourceURL)) {
-				$properties['ObjectTitle'] = TextField::create($this->getName() . '[title]', _t('Linkable.TITLE', 'Title'));
-				$properties['Width'] = TextField::create($this->getName() . '[width]', _t('Linkable.WIDTH', 'Width'));
-				$properties['Height'] = TextField::create($this->getName() . '[height]', _t('Linkable.HEIGHT', 'Height'));
-				$properties['ThumbURL'] = HiddenField::create($this->getName() . '[thumburl]', '');
-				$properties['Type'] = HiddenField::create($this->getName() . '[type]', '');
-				if ($this->editableEmbedCode) {
-					$properties['EmbedHTML'] = TextareaField::create($this->getName() . '[embedhtml]', 'Embed code');
-				} else {
-					$properties['EmbedHTML'] = HiddenField::create($this->getName() . '[embedhtml]', '');
-				}
-				
-				$properties['ObjectDescription'] = TextAreaField::create($this->getName() . '[description]', _t('Linkable.DESCRIPTION', 'Description'));
-				$properties['ExtraClass'] = TextField::create($this->getName() . '[extraclass]', _t('Linkable.CSSCLASS', 'CSS class'));
+    public function FieldHolder($properties = array())
+    {
+        Requirements::css(LINKABLE_PATH . '/css/embeddedobjectfield.css');
+        Requirements::javascript(LINKABLE_PATH . '/javascript/embeddedobjectfield.js');
 
-				foreach ($properties as $key => $field) {
-					if ($key == 'ObjectTitle') {
-						$key = 'Title';
-					}elseif ($key == 'ObjectDescription') {
-						$key = 'Description';
-					}
-					$field->setValue($this->object->$key);
-				}
+        if ($this->object && $this->object->ID) {
+            $properties['SourceURL'] = TextField::create($this->getName() . '[sourceurl]', '')->setAttribute('placeholder', _t('Linkable.SOURCEURL', 'Source URL'));
 
-				if ($this->object->ThumbURL) {
-					$properties['ThumbImage'] = LiteralField::create($this->getName(), '<img src="' . $this->object->ThumbURL . '" />');
-				}
-			}
-		} else {
-			$properties['SourceURL'] = TextField::create($this->getName() . '[sourceurl]','')->setAttribute('placeholder', _t('Linkable.SOURCEURL', 'Source URL'));
-		}
+            if (strlen($this->object->SourceURL)) {
+                $properties['ObjectTitle'] = TextField::create($this->getName() . '[title]', _t('Linkable.TITLE', 'Title'));
+                $properties['Width'] = TextField::create($this->getName() . '[width]', _t('Linkable.WIDTH', 'Width'));
+                $properties['Height'] = TextField::create($this->getName() . '[height]', _t('Linkable.HEIGHT', 'Height'));
+                $properties['ThumbURL'] = HiddenField::create($this->getName() . '[thumburl]', '');
+                $properties['Type'] = HiddenField::create($this->getName() . '[type]', '');
+                if ($this->editableEmbedCode) {
+                    $properties['EmbedHTML'] = TextareaField::create($this->getName() . '[embedhtml]', 'Embed code');
+                } else {
+                    $properties['EmbedHTML'] = HiddenField::create($this->getName() . '[embedhtml]', '');
+                }
 
-		$field = parent::FieldHolder($properties);
-		return $field;
-	}
+                $properties['ObjectDescription'] = TextAreaField::create($this->getName() . '[description]', _t('Linkable.DESCRIPTION', 'Description'));
+                $properties['ExtraClass'] = TextField::create($this->getName() . '[extraclass]', _t('Linkable.CSSCLASS', 'CSS class'));
 
-	public function saveInto(DataObjectInterface $record) {
-		$val = $this->Value();
-		$field = $this->getName() . 'ID';
+                foreach ($properties as $key => $field) {
+                    if ($key == 'ObjectTitle') {
+                        $key = 'Title';
+                    } elseif ($key == 'ObjectDescription') {
+                        $key = 'Description';
+                    }
+                    $field->setValue($this->object->$key);
+                }
 
-		if (!strlen($val['sourceurl']) && $this->object) {
-			if($this->object->exists()) {
-				$this->object->delete();
-			}
-			$record->$field = 0;
-			return;
-		}
+                if ($this->object->ThumbURL) {
+                    $properties['ThumbImage'] = LiteralField::create($this->getName(), '<img src="' . $this->object->ThumbURL . '" />');
+                }
+            }
+        } else {
+            $properties['SourceURL'] = TextField::create($this->getName() . '[sourceurl]', '')->setAttribute('placeholder', _t('Linkable.SOURCEURL', 'Source URL'));
+        }
 
- 		if (!$this->object) {
-			$this->object = EmbeddedObject::create();
-		}
+        $field = parent::FieldHolder($properties);
+        return $field;
+    }
 
-		$props = array_keys(Config::inst()->get('EmbeddedObject', 'db'));
-		foreach ($props as $prop) {
-			$this->object->$prop = isset($val[strtolower($prop)]) ? $val[strtolower($prop)] : null;
-		}
+    public function saveInto(DataObjectInterface $record)
+    {
+        $val = $this->Value();
+        $field = $this->getName() . 'ID';
 
-		$this->object->write();
-		$record->$field = $this->object->ID;
-	}
+        if (!strlen($val['sourceurl']) && $this->object) {
+            if ($this->object->exists()) {
+                $this->object->delete();
+            }
+            $record->$field = 0;
+            return;
+        }
 
-	public function update(SS_HTTPRequest $request) {
-		if (!SecurityToken::inst()->checkRequest($request)) {
-			return '';
-		}
-		$url = $request->postVar('URL');
-		if (strlen($url)) {
-			$info = Embed\Embed::create($url);
-			if ($info) {
-				$object = EmbeddedObject::create();
-				$object->setFromEmbed($info);
+        if (!$this->object) {
+            $this->object = EmbeddedObject::create();
+        }
 
-				$this->object = $object;
-				// needed to make sure the check in FieldHolder works out
-				$object->ID = -1;
-				return $this->FieldHolder();
-			} else {
-				$this->message = _t('EmbeddedObjectField.ERROR', 'Could not look up provided URL: ' . Convert::raw2xml($url));
-				return $this->FieldHolder();
-			}
-		} else {
-			$this->object = null;
-			return $this->FieldHolder();
-		}
-	}
+        $props = array_keys(Config::inst()->get('EmbeddedObject', 'db'));
+        foreach ($props as $prop) {
+            $this->object->$prop = isset($val[strtolower($prop)]) ? $val[strtolower($prop)] : null;
+        }
+
+        $this->object->write();
+        $record->$field = $this->object->ID;
+    }
+
+    public function update(SS_HTTPRequest $request)
+    {
+        if (!SecurityToken::inst()->checkRequest($request)) {
+            return '';
+        }
+        $url = $request->postVar('URL');
+        if (strlen($url)) {
+            $info = Embed\Embed::create($url);
+            if ($info) {
+                $object = EmbeddedObject::create();
+                $object->setFromEmbed($info);
+
+                $this->object = $object;
+                // needed to make sure the check in FieldHolder works out
+                $object->ID = -1;
+                return $this->FieldHolder();
+            } else {
+                $this->message = _t('EmbeddedObjectField.ERROR', 'Could not look up provided URL: ' . Convert::raw2xml($url));
+                return $this->FieldHolder();
+            }
+        } else {
+            $this->object = null;
+            return $this->FieldHolder();
+        }
+    }
 }

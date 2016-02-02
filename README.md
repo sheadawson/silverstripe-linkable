@@ -9,7 +9,7 @@ See 1.1 branch/releases for SilverStripe 3.1 support
 
 ## Maintainers
 
-* shea@silverstripe.com.au
+* shea@livesource.co.nz
 
 ## Description
 
