@@ -8,7 +8,8 @@ jQuery.entwine("linkfield", function($) {
 			var self = this;
 			this.setDialog(self.siblings('.linkfield-dialog:first'));
 
-			var formUrl = this.parents('form').attr('action'),
+			var form = this.parents('form');
+                formUrl = form.attr('action'),
 				formUrlParts = formUrl.split('?'),
 				formUrl = formUrlParts[0],
 				url = encodeURI(formUrl) + '/field/' + this.attr('name') + '/LinkFormHTML';
@@ -52,6 +53,7 @@ jQuery.entwine("linkfield", function($) {
 					if($(response).is(".field")) {
 						self.getDialog().empty().dialog("close");
 						self.parents('.field:first').replaceWith(response);
+                        form.addClass('changed');
 					} else {
 						self.getDialog().html(response);
 					}
@@ -85,7 +87,8 @@ jQuery.entwine("linkfield", function($) {
 
 	$(".linkfield-remove-button").entwine({
 		onclick: function() {
-			var formUrl = this.parents('form').attr('action'),
+            var form = this.parents('form');
+			var formUrl = form.attr('action'),
 				formUrlParts = formUrl.split('?'),
 				formUrl = formUrlParts[0],
 				url = encodeURI(formUrl) + '/field/' + this.siblings('input:first').prop('name') + '/doRemoveLink';
@@ -95,7 +98,10 @@ jQuery.entwine("linkfield", function($) {
 			}
 			var holder = this.parents('.field:first');
 			this.parents('.middleColumn:first').html("<img src='framework/images/network-save.gif' />");
-			holder.load(url);
+			holder.load(url, function() {
+               form.addClass('changed');
+            });
+
 			return false;
 		},
 	});
