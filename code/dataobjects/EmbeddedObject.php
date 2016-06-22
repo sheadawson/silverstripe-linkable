@@ -10,21 +10,21 @@
 class EmbeddedObject extends DataObject
 {
     private static $db = array(
-        'Title'                => 'Varchar(255)',
-        'Type'                => 'Varchar',
-        'SourceURL'            => 'Varchar(255)',
-        'Width'                => 'Varchar',
-        'Height'            => 'Varchar',
-        'Description'        => 'HTMLText',
-        'ThumbURL'            => 'Varchar(255)',
-        'ExtraClass'        => 'Varchar(64)',
-        'EmbedHTML'            => 'Text',
+        'Title' => 'Varchar(255)',
+        'Type' => 'Varchar',
+        'SourceURL' => 'Varchar(255)',
+        'Width' => 'Varchar',
+        'Height' => 'Varchar',
+        'Description' => 'HTMLText',
+        'ThumbURL' => 'Varchar(255)',
+        'ExtraClass' => 'Varchar(64)',
+        'EmbedHTML' => 'Text',
     );
 
     public function Embed()
     {
         $options = array(
-            'width'    => $this->Width,
+            'width' => $this->Width,
             'height' => $this->Height,
         );
         $this->setFromURL($this->SourceURL);
