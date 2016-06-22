@@ -205,6 +205,7 @@ class Link extends DataObject
             switch ($this->Type) {
                 case 'URL':
                 case 'Email':
+                case 'Phone':
                     $this->Title = $this->{$this->Type};
                     break;
                 case 'SiteTree':
