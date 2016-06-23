@@ -80,7 +80,7 @@ In your template, you can set the style to use by adding setStyle()
 $ExampleLink.setStyle('iconbutton')
 ```
 
-### Link selectable styles
+### Selectable link styles
 
 You can create styles for an administrator to select in a dropdown field.
 To add these styles in to the dropdown, define them in your site config.yaml file.
@@ -89,7 +89,7 @@ To add these styles in to the dropdown, define them in your site config.yaml fil
 Link:
   styles:
     button: Button
-    iconbutton: Button with icon
+    iconbutton: Description of button
 ```
 
 The example above will be rendered in Link_button.ss and Link_iconbutton.ss if available.
