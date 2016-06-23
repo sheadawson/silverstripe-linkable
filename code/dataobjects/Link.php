@@ -258,12 +258,17 @@ class Link extends DataObject
     public function forTemplate()
     {
         if ($this->LinkURL) {
-            return $this->renderWith(
+            $link = $this->renderWith(
                 array(
                     'Link_'.$this->Style, // Render link with this template if its found. eg Link_Button.ss
                     'Link'
                 )
             );
+
+            // Redundent. Reccommended to use templating above.
+            $this->extend('updateLinkTemplate', $this, $link);
+
+            return $link;
         }
     }
 
