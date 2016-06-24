@@ -69,6 +69,44 @@ Link:
     iconbutton: Description of iconbutton template # looks for  Link_iconbutton.ss template
 ```
 
+### Adding custom Link types
+
+Sometimes you might have custom DataObject types that you would like CMS users to be able to create Links to. This can be achieved by adding a DataExtension to the Link DataObject, see the below example for making Product objects Linkable.
+
+```php
+class CustomLink extends DataExtension
+{
+    private static $has_one = array(
+        'Product' => 'Product'
+    );
+
+    private static $types = array(
+        'Product' => 'A Product on this site'
+    );
+
+    public function updateCMSFields(FieldList $fields)
+    {
+		// update the Link Type dropdown to contain your custom Link types
+        $fields->dataFieldByName('Type')->setSource($this->owner->config()->types);
+
+		// Add a dropdown field containing your ProductList
+		$fields->addFieldToTab(
+            'Root.Main',
+            DropdownField::create('ProductID', 'Product', Product::get()->map('ID', 'Title')->toArray())
+                ->setHasEmptyDefault(true)
+                ->displayIf('Type')->isEqualTo('Product')->end()
+        );
+	}
+```
+
+In your config.yml
+
+```YAML
+Link:
+  extensions:
+    - CustomLink
+```
+
 ## EmbeddedObject/Field
 
 Use the EmbeddedObject/Field to easily add oEmbed content to a DataObject or Page.
