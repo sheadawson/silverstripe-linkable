@@ -1,4 +1,4 @@
-# SilverStripe Linkable 1.2
+# SilverStripe Linkable 1.3
 
 ## Requirements
 
