@@ -1,4 +1,4 @@
-# SilverStripe Linkable 1.2
+# SilverStripe Linkable 1.3
 
 ## Requirements
 
@@ -50,50 +50,62 @@ In your template, you can render the links anchor tag with
 $ExampleLink
 ```
 
-### Custom links/tags
+### Customising link templates
 
-Roll your own tag, making sure that the url is set first to avoid broken links
+Link tags are rendered with the Link.ss template. You can override this template by copying it into your theme or project folder and modifying as required.
 
-```html
-<% if $ExampleLink.LinkURL %>
-	<% with ExampleLink %>
-		<a href='{$LinkURL}'{$TargetAttr}{$ClassAttr}>{$Title}</a>
-	<% end_with %>
-<% end_if %>
-```
-
-### Reusable custom link styles/tags
-
-Create a .ss file with the name Link_example.ss (replace "example" with your style name).
-
-Link_iconbutton.ss
+You can also specify a custom template to render any Link with by calling the renderWith function and passing in the name of your custom template
 
 ```html
-<a href='{$LinkURL}'{$TargetAttr}{$ClassAttr}>
-    <i class="fa fa-github" aria-hidden="true"></i>{$Title}
-</a>
+$ExampleLink.renderWith(Link_button)
 ```
 
-In your template, you can set the style to use by adding setStyle()
+Finally, you can optionally offer CMS users the ability to select from a list of templates, allowing them to choose how their Link should be rendered. To enable this feature, create your custom template files and register them in your site config.yml file as below.
 
-```html
-$ExampleLink.setStyle('iconbutton')
-```
-
-### Selectable link styles
-
-You can create styles for an administrator to select in a dropdown field.
-To add these styles in to the dropdown, define them in your site config.yaml file.
-
-```yaml
+```YAML
 Link:
-  styles:
-    button: Button
-    iconbutton: Description of button
+  templates:
+    button: Description of button template # looks for Link_button.ss template
+    iconbutton: Description of iconbutton template # looks for  Link_iconbutton.ss template
 ```
 
-The example above will be rendered in Link_button.ss and Link_iconbutton.ss if available.
-If the template isn't available it will fall back by adding the style as a class to Link.ss
+### Adding custom Link types
+
+Sometimes you might have custom DataObject types that you would like CMS users to be able to create Links to. This can be achieved by adding a DataExtension to the Link DataObject, see the below example for making Product objects Linkable.
+
+```php
+class CustomLink extends DataExtension
+{
+    private static $has_one = array(
+        'Product' => 'Product'
+    );
+
+    private static $types = array(
+        'Product' => 'A Product on this site'
+    );
+
+    public function updateCMSFields(FieldList $fields)
+    {
+		// update the Link Type dropdown to contain your custom Link types
+        $fields->dataFieldByName('Type')->setSource($this->owner->config()->types);
+
+		// Add a dropdown field containing your ProductList
+		$fields->addFieldToTab(
+            'Root.Main',
+            DropdownField::create('ProductID', 'Product', Product::get()->map('ID', 'Title')->toArray())
+                ->setHasEmptyDefault(true)
+                ->displayIf('Type')->isEqualTo('Product')->end()
+        );
+	}
+```
+
+In your config.yml
+
+```YAML
+Link:
+  extensions:
+    - CustomLink
+```
 
 ## EmbeddedObject/Field
 
