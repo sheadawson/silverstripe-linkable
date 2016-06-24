@@ -10,11 +10,6 @@
 class Link extends DataObject
 {
     /**
-     * @var string custom style for templates e.g Link_Button
-     */
-    protected $style;
-
-    /**
      * @var string custom CSS classes for template
      */
     protected $cssClass;
@@ -30,7 +25,7 @@ class Link extends DataObject
         'Phone' => 'Varchar(255)',
         'Anchor' => 'Varchar(255)',
         'OpenInNewWindow' => 'Boolean',
-        'SelectedStyle' => 'Varchar(255)'
+        'Template' => 'Varchar(255)'
     );
 
     /**
@@ -51,12 +46,12 @@ class Link extends DataObject
     );
 
     /**
-     * A map of styles that are available for templating
-     * Custom styles can be added to this
+     * A map of templates that are available for rendering
+     * Link objects with
      *
      * @var array
      */
-    private static $styles = array();
+    private static $templates = array();
 
     /**
      * A map of object types that can be linked to
@@ -90,23 +85,23 @@ class Link extends DataObject
                 // seem to need to remove both of these for different SS versions...
                 'FileID',
                 'File',
-                'SelectedStyle',
+                'Template',
                 'Anchor'
             )
         );
 
-        $styles = $this->config()->get('styles');
-        if ($styles) {
-            $i18nStyles = array();
-            foreach ($styles as $key => $label) {
-                $i18nStyles[$key] = _t('Linkable.STYLE'.strtoupper($key), $label);
+        $templates = $this->config()->get('templates');
+        if ($templates) {
+            $i18nTemplates = array();
+            foreach ($templates as $key => $label) {
+                $i18nTemplates[$key] = _t('Linkable.STYLE'.strtoupper($key), $label);
             }
             $fields->addFieldToTab(
                 'Root.Main',
                 DropdownField::create(
-                    'Style',
-                    _t('Linkable.LINKSTYLE', 'Style'),
-                    $i18nStyles
+                    'Template',
+                    _t('Linkable.STYLE', 'Style'),
+                    $i18nTemplates
                 )->setEmptyString('Default')
             );
         }
@@ -227,18 +222,6 @@ class Link extends DataObject
     }
 
     /**
-     * Add style to be used in CSS class and use template if its available
-     *
-     * @param string $style CSS class.
-     * @return Link
-     **/
-    public function setStyle($style)
-    {
-        $this->style = $style;
-        return $this;
-    }
-
-    /**
      * Add CSS classes.
      *
      * @param string $class CSS classes.
@@ -260,12 +243,12 @@ class Link extends DataObject
         if ($this->LinkURL) {
             $link = $this->renderWith(
                 array(
-                    'Link_'.$this->Style, // Render link with this template if its found. eg Link_Button.ss
+                    'Link_' . $this->Template, // Render link with this template if its found. eg Link_button.ss
                     'Link'
                 )
             );
 
-            // Redundent. Reccommended to use templating above.
+            // Legacy. Reccommended to use templating above.
             $this->extend('updateLinkTemplate', $this, $link);
 
             return $link;
@@ -305,20 +288,6 @@ class Link extends DataObject
     }
 
     /**
-     * Gets the style
-     *
-     * @return string
-     **/
-    public function getStyle()
-    {
-        $style = $this->SelectedStyle ? : null;
-        if ($this->style) {
-            $style = Convert::raw2att($this->style);
-        }
-        return $style;
-    }
-
-    /**
      * Gets the classes for this link.
      *
      * @return string
@@ -326,9 +295,6 @@ class Link extends DataObject
     public function getClasses()
     {
         $classes = explode(' ', $this->cssClass);
-        if ($this->Style) {
-            $classes[] = $this->Style;
-        }
         $this->extend('updateClasses', $classes);
         $classes = implode(' ', $classes);
         return $classes;
@@ -382,7 +348,7 @@ class Link extends DataObject
             case 'URL':
             case 'Email':
             case 'Phone':
-                if ($this->{$type} =='') {
+                if ($this->{$type} == '') {
                     $valid = false;
                     $message = _t('Linkable.VALIDATIONERROR_EMPTY'.strtoupper($type), "You must enter a $type for a link type of \"$type\"");
                 }
