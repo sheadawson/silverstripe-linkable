@@ -350,7 +350,7 @@ class Link extends DataObject
             case 'Phone':
                 if ($this->{$type} == '') {
                     $valid = false;
-                    $message = _t('Linkable.VALIDATIONERROR_EMPTY'.strtoupper($type), "You must enter a $type for a link type of \"$type\"");
+                    $message = _t('Linkable.VALIDATIONERROR_EMPTY'.strtoupper($type), "You must enter a $type for a link type of \"$this->LinkType\"");
                 }
                 break;
             default:
@@ -377,7 +377,7 @@ class Link extends DataObject
                     }
                     break;
                 case 'Phone':
-                    if (!preg_match("/^\+?[0-9]{3,4}[- ]{0,1}[0-9]{3,4}[- ]{0,1}[0-9]{4}$/", $this->Phone)) {
+                    if (!preg_match("/^\+?[0-9]{1,5}[- ]{0,1}[0-9]{3,4}[- ]{0,1}[0-9]{4}$/", $this->Phone)) {
                         $valid = false;
                         $message = _t('Linkable.VALIDATIONERROR_VALIDPHONE', 'Please enter a valid Phone number');
                     }
