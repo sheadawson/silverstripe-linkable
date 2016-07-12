@@ -107,6 +107,8 @@ Link:
     - CustomLink
 ```
 
+Please see the [wiki](https://github.com/sheadawson/silverstripe-linkable/wiki) for more customisation examples.
+
 ## EmbeddedObject/Field
 
 Use the EmbeddedObject/Field to easily add oEmbed content to a DataObject or Page.
