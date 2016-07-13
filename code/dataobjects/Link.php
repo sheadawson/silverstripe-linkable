@@ -157,8 +157,8 @@ class Link extends DataObject
                     ),
                     TextField::create(
                         'Anchor',
-                        _t('Linkable.ANCHOR', 'Anchor')
-                    )->setRightTitle(_t('Linkable.ANCHORINFO', 'Include # at the start of your anchor name'))
+                        _t('Linkable.ANCHOR', 'Anchor/Querystring')
+                    )->setRightTitle(_t('Linkable.ANCHORINFO', 'Include # at the start of your anchor name or, ? at the start of your querystring'))
                 )->displayIf("Type")->isEqualTo("SiteTree")->end()
             ),
             'OpenInNewWindow'
