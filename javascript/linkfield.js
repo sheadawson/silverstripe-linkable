@@ -2,14 +2,14 @@ jQuery.entwine("linkfield", function($) {
 
 	$("input.link").entwine({
 		Loading: null,
-		Dialog:  null,
-		URL:  null,
+		Dialog: null,
+		URL: null,
 		onmatch: function() {
 			var self = this;
 			this.setDialog(self.siblings('.linkfield-dialog:first'));
 
 			var form = this.parents('form');
-                formUrl = form.attr('action'),
+				formUrl = form.attr('action'),
 				formUrlParts = formUrl.split('?'),
 				formUrl = formUrlParts[0],
 				url = encodeURI(formUrl) + '/field/' + this.attr('name') + '/LinkFormHTML';
@@ -30,12 +30,12 @@ jQuery.entwine("linkfield", function($) {
 			var windowHeight = $(window).height();
 
 			this.getDialog().data("field", this).dialog({
-				autoOpen: 	false,
-				width:   	$(window).width()  * 80 / 100,
-				height:   	$(window).height() * 80 / 100,
-				modal:    	true,
-				title: 		this.data('dialog-title'),
-				position: 	{ my: "center", at: "center", of: window }
+				autoOpen: false,
+				width: $(window).width()	* 80 / 100,
+				height: $(window).height() * 80 / 100,
+				modal: true,
+				title: this.data('dialog-title'),
+				position: { my: "center", at: "center", of: window }
 			});
 
 			// submit button loading state while form is submitting
@@ -53,7 +53,7 @@ jQuery.entwine("linkfield", function($) {
 					if($(response).is(".field")) {
 						self.getDialog().empty().dialog("close");
 						self.parents('.field:first').replaceWith(response);
-                        form.addClass('changed');
+						form.addClass('changed');
 					} else {
 						self.getDialog().html(response);
 					}
@@ -91,7 +91,7 @@ jQuery.entwine("linkfield", function($) {
 
 	$(".linkfield-remove-button").entwine({
 		onclick: function() {
-            var form = this.parents('form');
+			var form = this.parents('form');
 			var formUrl = form.attr('action'),
 				formUrlParts = formUrl.split('?'),
 				formUrl = formUrlParts[0],
@@ -103,8 +103,8 @@ jQuery.entwine("linkfield", function($) {
 			var holder = this.parents('.field:first');
 			this.parents('.middleColumn:first').html("<img src='framework/images/network-save.gif' />");
 			holder.load(url, function() {
-               form.addClass('changed');
-            });
+				 form.addClass('changed');
+			});
 
 			return false;
 		},
