@@ -64,8 +64,12 @@ jQuery.entwine("linkfield", function($) {
 				return false;
 			});
 		},
+
 		onunmatch: function () {
-            $('.linkfield-dialog.ui-dialog-content').remove();
+			var self = this;
+			$('.linkfield-dialog.ui-dialog-content').filter(function(){
+				return self[0] == $(this).data("field")[0];
+			}).remove();
 		},
 		showDialog: function(url) {
 			var dlg = this.getDialog();
