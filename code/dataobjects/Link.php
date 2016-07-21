@@ -259,6 +259,7 @@ class Link extends DataObject
         $i18nTypes = array();
         $allowed_types = $this->config()->get('allowed_types');
         if ($this->allowed_types) {
+            // Prioritise local field over global settings
             $allowed_types = $this->allowed_types;
         }
         if ($allowed_types) {
@@ -266,6 +267,7 @@ class Link extends DataObject
                 unset($types[$key]);
             }
         }
+        // Get translateable labels
         foreach ($types as $key => $label) {
             $i18nTypes[$key] = _t('Linkable.TYPE'.strtoupper($key), $label);
         }
