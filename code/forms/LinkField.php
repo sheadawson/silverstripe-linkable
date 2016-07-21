@@ -20,6 +20,12 @@ class LinkField extends TextField
      **/
     protected $linkObject;
 
+    /**
+     * List the allowed included link types.  If null all are allowed.
+     *
+     * @var array
+     **/
+    protected $allowed_types = null;
 
     public static $allowed_actions = array(
         'LinkForm',
@@ -56,7 +62,7 @@ class LinkField extends TextField
             $link = Link::get()->byID($linkID);
         }
         $link = $link ? $link : singleton('Link');
-
+        $link->setAllowedTypes($this->getAllowedTypes());
         $fields = $link->getCMSFields();
 
         $title = $link ? _t('Linkable.EDITLINK', 'Edit Link') : _t('Linkable.ADDLINK', 'Add Link');
@@ -152,5 +158,16 @@ class LinkField extends TextField
     {
         $this->isFrontend = $bool;
         return $this->this;
+    }
+
+    public function setAllowedTypes($types = array())
+    {
+        $this->allowed_types = $types;
+        return $this;
+    }
+
+    public function getAllowedTypes()
+    {
+        return $this->allowed_types;
     }
 }
