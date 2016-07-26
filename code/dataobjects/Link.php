@@ -262,6 +262,11 @@ class Link extends DataObject
             // Prioritise local field over global settings
             $allowed_types = $this->allowed_types;
         }
+        foreach ($allowed_types as $type) {
+            if (!array_key_exists($type, $types)) {
+                user_error("{$type} is not a valid link type");
+            }
+        }
         if ($allowed_types) {
             foreach (array_diff_key($types, array_flip($allowed_types)) as $key => $value) {
                 unset($types[$key]);
