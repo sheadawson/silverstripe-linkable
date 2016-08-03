@@ -69,6 +69,23 @@ Link:
     iconbutton: Description of iconbutton template # looks for  Link_iconbutton.ss template
 ```
 
+### Limit allowed Link types
+
+To limit link types for each field.
+
+```php
+LinkField::create('ExampleLinkID', 'Link Title')->setAllowedTypes(array('URL','Phone'))
+```
+
+You can also globally limit link types.  To limit types define them in your site config.yml file as below.
+
+```YAML
+Link:
+  allowed_types:
+    - URL
+    - SiteTree
+```
+
 ### Adding custom Link types
 
 Sometimes you might have custom DataObject types that you would like CMS users to be able to create Links to. This can be achieved by adding a DataExtension to the Link DataObject, see the below example for making Product objects Linkable.
