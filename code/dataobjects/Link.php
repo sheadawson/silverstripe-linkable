@@ -306,32 +306,40 @@ class Link extends DataObject
      *
      * @return string
      **/
-    public function getLinkURL()
-    {
-        if (!$this->ID) {
-            return;
-        }
-        switch ($this->Type) {
-            case 'URL':
-                return $this->URL;
-            case 'Email':
-                return $this->Email ? "mailto:$this->Email" : null;
-            case 'Phone':
-                return $this->Phone ? "tel:$this->Phone" : null;
-            default:
-                if ($this->Type && $component = $this->getComponent($this->Type)) {
-                    if (!$component->exists()) {
-                        return false;
-                    }
-                    if ($component->hasMethod('Link')) {
-                        return $component->Link() . $this->Anchor;
-                    } else {
-                        return "Please implement a Link() method on your dataobject \"$this->Type\"";
-                    }
-                }
-                break;
-        }
-    }
+     public function getLinkURL()
+     {
+         if (!$this->ID) {
+             return;
+         }
+         $type = $this->Type;
+         switch ($type) {
+             case 'URL':
+                 $LinkURL = $this->URL;
+                 break;
+             case 'Email':
+                 $LinkURL = $this->Email ? "mailto:$this->Email" : null;
+             case 'Phone':
+                 $LinkURL = $this->Phone ? "tel:$this->Phone" : null;
+             default:
+                 if ($this->TypeHasDbField) {
+                     $LinkURL = $this->{$type};
+                 } else {
+                     if ($type && $component = $this->getComponent($type)) {
+                         if (!$component->exists()) {
+                             $LinkURL = false;
+                         }
+                         if ($component->hasMethod('Link')) {
+                             $LinkURL = $component->Link() . $this->Anchor;
+                         } else {
+                             $LinkURL = "Please implement a Link() method on your dataobject \"$type\"";
+                         }
+                     }
+                 }
+                 break;
+         }
+         $this->extend('updateLinkURL', $LinkURL);
+         return $LinkURL;
+     }
 
     /**
      * Gets the classes for this link.
@@ -379,6 +387,20 @@ class Link extends DataObject
     }
 
     /**
+     * Check if the selected type has a db field otherwise assume its a related object.
+     *
+     * @return boolean
+     **/
+    public function getTypeHasDbField()
+    {
+        return in_array(
+            $this->Type,
+            array_keys($this->Config()->get('db'))
+        );
+    }
+
+
+    /**
      * Validate
      *
      * @return ValidationResult
@@ -400,10 +422,18 @@ class Link extends DataObject
                 }
                 break;
             default:
-                if ($type && empty($this->{$type.'ID'})) {
-                    $valid = false;
-                    $message = _t('Linkable.VALIDATIONERROR_OBJECT', "Please select a {value} object to link to", array('value' => $type));
+                if ($this->TypeHasDbField) {
+                    if ($type && empty($this->{$type})) {
+                        $valid = false;
+                        $message = _t('Linkable.VALIDATIONERROR_EMPTY', "You must enter a $type for a link type of \"$this->LinkType\"");
+                    }
+                } else {
+                    if ($type && empty($this->{$type.'ID'})) {
+                        $valid = false;
+                        $message = _t('Linkable.VALIDATIONERROR_OBJECT', "Please select a {value} object to link to", array('value' => $type));
+                    }
                 }
+
                 break;
         }
         // if its already failed don't bother checking the rest
