@@ -252,30 +252,35 @@ class Link extends DataObject
      * Returns allowed link types
      *
      * @return array
-     **/
+     */
     public function getTypes()
     {
         $types = $this->config()->get('types');
         $i18nTypes = array();
         $allowed_types = $this->config()->get('allowed_types');
+        
         if ($this->allowed_types) {
             // Prioritise local field over global settings
             $allowed_types = $this->allowed_types;
         }
-        foreach ($allowed_types as $type) {
-            if (!array_key_exists($type, $types)) {
-                user_error("{$type} is not a valid link type");
-            }
-        }
+ 
         if ($allowed_types) {
+           foreach ($allowed_types as $type) {
+                if (!array_key_exists($type, $types)) {
+                    user_error("{$type} is not a valid link type");
+                }
+            }
+        
             foreach (array_diff_key($types, array_flip($allowed_types)) as $key => $value) {
                 unset($types[$key]);
             }
         }
-        // Get translateable labels
+        
+        // Get translatable labels
         foreach ($types as $key => $label) {
             $i18nTypes[$key] = _t('Linkable.TYPE'.strtoupper($key), $label);
         }
+        
         return $i18nTypes;
     }
 
