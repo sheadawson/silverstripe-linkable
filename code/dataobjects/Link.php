@@ -323,8 +323,10 @@ class Link extends DataObject
                  break;
              case 'Email':
                  $LinkURL = $this->Email ? "mailto:$this->Email" : null;
+                 break;
              case 'Phone':
                  $LinkURL = $this->Phone ? "tel:$this->Phone" : null;
+                 break;
              default:
                  if ($this->TypeHasDbField) {
                      $LinkURL = $this->{$type};
