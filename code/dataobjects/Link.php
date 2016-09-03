@@ -68,6 +68,13 @@ class Link extends DataObject
     );
 
     /**
+     * List the allowed included link types.  If null all are allowed.
+     *
+     * @var array
+     **/
+    private static $allowed_types = null;
+
+    /**
      * @return FieldList
      */
     public function getCMSFields()
@@ -85,6 +92,7 @@ class Link extends DataObject
                 // seem to need to remove both of these for different SS versions...
                 'FileID',
                 'File',
+
                 'Template',
                 'Anchor'
             )
@@ -110,17 +118,12 @@ class Link extends DataObject
             ->setTitle(_t('Linkable.TITLE', 'Title'))
             ->setRightTitle(_t('Linkable.OPTIONALTITLE', 'Optional. Will be auto-generated from link if left blank'));
 
-        $types = $this->config()->get('types');
-        $i18nTypes = array();
-        foreach ($types as $key => $label) {
-            $i18nTypes[$key] = _t('Linkable.TYPE'.strtoupper($key), $label);
-        }
         $fields->replaceField(
             'Type',
             DropdownField::create(
                 'Type',
                 _t('Linkable.LINKTYPE', 'Link Type'),
-                $i18nTypes
+                $this->Types
             )->setEmptyString(' '),
             'OpenInNewWindow'
         );
@@ -231,6 +234,54 @@ class Link extends DataObject
     {
         $this->cssClass = $class;
         return $this;
+    }
+
+    /**
+     * Sets allowed link types
+     *
+     * @param array
+     * @return Link
+     **/
+    public function setAllowedTypes($types = null)
+    {
+        $this->allowed_types = $types;
+        return $this;
+    }
+
+    /**
+     * Returns allowed link types
+     *
+     * @return array
+     */
+    public function getTypes()
+    {
+        $types = $this->config()->get('types');
+        $i18nTypes = array();
+        $allowed_types = $this->config()->get('allowed_types');
+        
+        if ($this->allowed_types) {
+            // Prioritise local field over global settings
+            $allowed_types = $this->allowed_types;
+        }
+ 
+        if ($allowed_types) {
+           foreach ($allowed_types as $type) {
+                if (!array_key_exists($type, $types)) {
+                    user_error("{$type} is not a valid link type");
+                }
+            }
+        
+            foreach (array_diff_key($types, array_flip($allowed_types)) as $key => $value) {
+                unset($types[$key]);
+            }
+        }
+        
+        // Get translatable labels
+        foreach ($types as $key => $label) {
+            $i18nTypes[$key] = _t('Linkable.TYPE'.strtoupper($key), $label);
+        }
+        
+        return $i18nTypes;
     }
 
     /**
