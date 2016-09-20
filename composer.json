@@ -29,7 +29,7 @@
     "extra": {
         "installer-name": "linkable",
         "branch-alias": {
-            "dev-master": "1.2.x-dev"
+            "dev-master": "1.4.x-dev"
         }
     }
 }
