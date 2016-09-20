@@ -34,12 +34,8 @@ class EmbeddedObject extends DataObject
     public function onBeforeWrite()
     {
         $changes = $this->getChangedFields();
-
-        if (isset($changes['Width']) && $changes['Width']['before']) {
-            $this->updateEmbedHTML();
-        }
-
-        if (isset($changes['Height']) && $changes['Height']['before']) {
+        
+        if (isset($changes['SourceURL']) && $changes['SourceURL']['after']) {
             $this->updateEmbedHTML();
         }
 
