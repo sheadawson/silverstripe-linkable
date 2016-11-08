@@ -68,6 +68,13 @@ class Link extends DataObject
     );
 
     /**
+     * List the allowed included link types.  If null all are allowed.
+     *
+     * @var array
+     **/
+    private static $allowed_types = null;
+
+    /**
      * @return FieldList
      */
     public function getCMSFields()
@@ -85,6 +92,7 @@ class Link extends DataObject
                 // seem to need to remove both of these for different SS versions...
                 'FileID',
                 'File',
+
                 'Template',
                 'Anchor'
             )
@@ -110,17 +118,12 @@ class Link extends DataObject
             ->setTitle(_t('Linkable.TITLE', 'Title'))
             ->setRightTitle(_t('Linkable.OPTIONALTITLE', 'Optional. Will be auto-generated from link if left blank'));
 
-        $types = $this->config()->get('types');
-        $i18nTypes = array();
-        foreach ($types as $key => $label) {
-            $i18nTypes[$key] = _t('Linkable.TYPE'.strtoupper($key), $label);
-        }
         $fields->replaceField(
             'Type',
             DropdownField::create(
                 'Type',
                 _t('Linkable.LINKTYPE', 'Link Type'),
-                $i18nTypes
+                $this->Types
             )->setEmptyString(' '),
             'OpenInNewWindow'
         );
@@ -234,6 +237,54 @@ class Link extends DataObject
     }
 
     /**
+     * Sets allowed link types
+     *
+     * @param array
+     * @return Link
+     **/
+    public function setAllowedTypes($types = null)
+    {
+        $this->allowed_types = $types;
+        return $this;
+    }
+
+    /**
+     * Returns allowed link types
+     *
+     * @return array
+     */
+    public function getTypes()
+    {
+        $types = $this->config()->get('types');
+        $i18nTypes = array();
+        $allowed_types = $this->config()->get('allowed_types');
+        
+        if ($this->allowed_types) {
+            // Prioritise local field over global settings
+            $allowed_types = $this->allowed_types;
+        }
+ 
+        if ($allowed_types) {
+           foreach ($allowed_types as $type) {
+                if (!array_key_exists($type, $types)) {
+                    user_error("{$type} is not a valid link type");
+                }
+            }
+        
+            foreach (array_diff_key($types, array_flip($allowed_types)) as $key => $value) {
+                unset($types[$key]);
+            }
+        }
+        
+        // Get translatable labels
+        foreach ($types as $key => $label) {
+            $i18nTypes[$key] = _t('Linkable.TYPE'.strtoupper($key), $label);
+        }
+        
+        return $i18nTypes;
+    }
+
+    /**
      * Renders an HTML anchor tag for this link
      *
      * @return string
@@ -260,32 +311,42 @@ class Link extends DataObject
      *
      * @return string
      **/
-    public function getLinkURL()
-    {
-        if (!$this->ID) {
-            return;
-        }
-        switch ($this->Type) {
-            case 'URL':
-                return $this->URL;
-            case 'Email':
-                return $this->Email ? "mailto:$this->Email" : null;
-            case 'Phone':
-                return $this->Phone ? "tel:$this->Phone" : null;
-            default:
-                if ($this->Type && $component = $this->getComponent($this->Type)) {
-                    if (!$component->exists()) {
-                        return false;
-                    }
-                    if ($component->hasMethod('Link')) {
-                        return $component->Link() . $this->Anchor;
-                    } else {
-                        return "Please implement a Link() method on your dataobject \"$this->Type\"";
-                    }
-                }
-                break;
-        }
-    }
+     public function getLinkURL()
+     {
+         if (!$this->ID) {
+             return;
+         }
+         $type = $this->Type;
+         switch ($type) {
+             case 'URL':
+                 $LinkURL = $this->URL;
+                 break;
+             case 'Email':
+                 $LinkURL = $this->Email ? "mailto:$this->Email" : null;
+                 break;
+             case 'Phone':
+                 $LinkURL = $this->Phone ? "tel:$this->Phone" : null;
+                 break;
+             default:
+                 if ($this->TypeHasDbField) {
+                     $LinkURL = $this->{$type};
+                 } else {
+                     if ($type && $component = $this->getComponent($type)) {
+                         if (!$component->exists()) {
+                             $LinkURL = false;
+                         }
+                         if ($component->hasMethod('Link')) {
+                             $LinkURL = $component->Link() . $this->Anchor;
+                         } else {
+                             $LinkURL = "Please implement a Link() method on your dataobject \"$type\"";
+                         }
+                     }
+                 }
+                 break;
+         }
+         $this->extend('updateLinkURL', $LinkURL);
+         return $LinkURL;
+     }
 
     /**
      * Gets the classes for this link.
@@ -333,6 +394,20 @@ class Link extends DataObject
     }
 
     /**
+     * Check if the selected type has a db field otherwise assume its a related object.
+     *
+     * @return boolean
+     **/
+    public function getTypeHasDbField()
+    {
+        return in_array(
+            $this->Type,
+            array_keys($this->Config()->get('db'))
+        );
+    }
+
+
+    /**
      * Validate
      *
      * @return ValidationResult
@@ -354,10 +429,18 @@ class Link extends DataObject
                 }
                 break;
             default:
-                if ($type && empty($this->{$type.'ID'})) {
-                    $valid = false;
-                    $message = _t('Linkable.VALIDATIONERROR_OBJECT', "Please select a {value} object to link to", array('value' => $type));
+                if ($this->TypeHasDbField) {
+                    if ($type && empty($this->{$type})) {
+                        $valid = false;
+                        $message = _t('Linkable.VALIDATIONERROR_EMPTY', "You must enter a $type for a link type of \"$this->LinkType\"");
+                    }
+                } else {
+                    if ($type && empty($this->{$type.'ID'})) {
+                        $valid = false;
+                        $message = _t('Linkable.VALIDATIONERROR_OBJECT', "Please select a {value} object to link to", array('value' => $type));
+                    }
                 }
+
                 break;
         }
         // if its already failed don't bother checking the rest

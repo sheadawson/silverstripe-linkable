@@ -27,8 +27,6 @@ input.embeddedObjectLoad {
 	background: #fff;
 	padding: 20px 20px 0;
 	border: 1px solid #eee;
-	-webkit-border-radius: 10px;
-	-moz-border-radius: 10px;
 	border-radius: 10px;
 	display: inline-block;
 	margin-left: 0;
@@ -45,7 +43,5 @@ input.embeddedObjectLoad {
 
 .embeddedObjectProperties input{
 	display: block;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
