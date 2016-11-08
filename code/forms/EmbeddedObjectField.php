@@ -49,19 +49,40 @@ class EmbeddedObjectField extends FormField
             $properties['SourceURL'] = TextField::create($this->getName() . '[sourceurl]', '')->setAttribute('placeholder', _t('Linkable.SOURCEURL', 'Source URL'));
 
             if (strlen($this->object->SourceURL)) {
-                $properties['ObjectTitle'] = TextField::create($this->getName() . '[title]', _t('Linkable.TITLE', 'Title'));
-                $properties['Width'] = TextField::create($this->getName() . '[width]', _t('Linkable.WIDTH', 'Width'));
-                $properties['Height'] = TextField::create($this->getName() . '[height]', _t('Linkable.HEIGHT', 'Height'));
-                $properties['ThumbURL'] = HiddenField::create($this->getName() . '[thumburl]', '');
-                $properties['Type'] = HiddenField::create($this->getName() . '[type]', '');
-                if ($this->editableEmbedCode) {
-                    $properties['EmbedHTML'] = TextareaField::create($this->getName() . '[embedhtml]', 'Embed code');
-                } else {
-                    $properties['EmbedHTML'] = HiddenField::create($this->getName() . '[embedhtml]', '');
+                if(!EmbeddedObjectField::config()->hide_fields) {
+                    $properties['ObjectTitle'] = TextField::create($this->getName() . '[title]', _t('Linkable.TITLE', 'Title'));
+                    $properties['Width'] = TextField::create($this->getName() . '[width]', _t('Linkable.WIDTH', 'Width'));
+                    $properties['Height'] = TextField::create($this->getName() . '[height]', _t('Linkable.HEIGHT', 'Height'));
+                    $properties['ThumbURL'] = HiddenField::create($this->getName() . '[thumburl]', '');
+                    $properties['Type'] = HiddenField::create($this->getName() . '[type]', '');
+                    if ($this->editableEmbedCode) {
+                        $properties['EmbedHTML'] = TextareaField::create($this->getName() . '[embedhtml]', 'Embed code');
+                    } else {
+                        $properties['EmbedHTML'] = HiddenField::create($this->getName() . '[embedhtml]', '');
+                    }
+
+                    $properties['ExtraClass'] = TextField::create($this->getName() . '[extraclass]', _t('Linkable.CSSCLASS', 'CSS class'));
+                }
+                else {
+                    $properties['ObjectTitle'] = HiddenField::create($this->getName() . '[title]', _t('Linkable.TITLE', 'Title'));
+                    $properties['Width'] = HiddenField::create($this->getName() . '[width]', _t('Linkable.WIDTH', 'Width'));
+                    $properties['Height'] = HiddenField::create($this->getName() . '[height]', _t('Linkable.HEIGHT', 'Height'));
+                    $properties['ThumbURL'] = HiddenField::create($this->getName() . '[thumburl]', '');
+                    $properties['Type'] = HiddenField::create($this->getName() . '[type]', '');
+                    if ($this->editableEmbedCode) {
+                        $properties['EmbedHTML'] = HiddenField::create($this->getName() . '[embedhtml]', 'Embed code');
+                    } else {
+                        $properties['EmbedHTML'] = HiddenField::create($this->getName() . '[embedhtml]', '');
+                    }
+                    $properties['ExtraClass'] = HiddenField::create($this->getName() . '[extraclass]', _t('Linkable.CSSCLASS', 'CSS class'));
                 }
 
-                $properties['ObjectDescription'] = TextAreaField::create($this->getName() . '[description]', _t('Linkable.DESCRIPTION', 'Description'));
-                $properties['ExtraClass'] = TextField::create($this->getName() . '[extraclass]', _t('Linkable.CSSCLASS', 'CSS class'));
+                if(!EmbeddedObjectField::config()->hide_description) {
+                    $properties['ObjectDescription'] = TextAreaField::create($this->getName() . '[description]', _t('Linkable.DESCRIPTION', 'Description'));
+                }
+                else {
+                    $properties['ObjectDescription'] = HiddenField::create($this->getName() . '[description]', _t('Linkable.DESCRIPTION', 'Description'));
+                }
 
                 foreach ($properties as $key => $field) {
                     if ($key == 'ObjectTitle') {
