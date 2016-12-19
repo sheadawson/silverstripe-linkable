@@ -22,9 +22,11 @@
     "require": {
         "php": ">=5.3.2",
         "silverstripe/framework": "^3.2",
-        "silverstripe/cms": "^3.2",
         "unclecheese/display-logic": "^1.4",
         "embed/embed": "~2.2.2"
+    },
+    "suggest": {
+        "silverstripe/cms": "To allow for a linking of the SiteTree data object."
     },
     "extra": {
         "installer-name": "linkable",
