@@ -23,7 +23,6 @@ class Link extends DataObject
         'URL' => 'Varchar(255)',
         'Email' => 'Varchar(255)',
         'Phone' => 'Varchar(255)',
-        'Anchor' => 'Varchar(255)',
         'OpenInNewWindow' => 'Boolean',
         'Template' => 'Varchar(255)'
     );
@@ -33,7 +32,6 @@ class Link extends DataObject
      */
     private static $has_one = array(
         'File' => 'File',
-        'SiteTree' => 'SiteTree'
     );
 
     /**
@@ -64,7 +62,6 @@ class Link extends DataObject
         'Email' => 'Email address',
         'Phone' => 'Phone number',
         'File' => 'File on this website',
-        'SiteTree' => 'Page on this website'
     );
 
     /**
@@ -151,18 +148,6 @@ class Link extends DataObject
                         'Title'
                     )
                 )->displayIf("Type")->isEqualTo("File")->end(),
-
-                DisplayLogicWrapper::create(
-                    TreeDropdownField::create(
-                        'SiteTreeID',
-                        _t('Linkable.PAGE', 'Page'),
-                        'SiteTree'
-                    ),
-                    TextField::create(
-                        'Anchor',
-                        _t('Linkable.ANCHOR', 'Anchor/Querystring')
-                    )->setRightTitle(_t('Linkable.ANCHORINFO', 'Include # at the start of your anchor name or, ? at the start of your querystring'))
-                )->displayIf("Type")->isEqualTo("SiteTree")->end()
             ),
             'OpenInNewWindow'
         );
@@ -179,11 +164,6 @@ class Link extends DataObject
             ->setTitle(_t('Linkable.PHONENUMBER', 'Phone Number'))
             ->displayIf("Type")
             ->isEqualTo("Phone");
-
-        if ($this->SiteTreeID && !$this->SiteTree()->isPublished()) {
-            $fields->dataFieldByName('SiteTreeID')
-                ->setRightTitle(_t('Linkable.DELETEDWARNING', 'Warning: The selected page appears to have been deleted or unpublished. This link may not appear or may be broken in the frontend'));
-        }
 
         $this->extend('updateCMSFields', $fields);
 
