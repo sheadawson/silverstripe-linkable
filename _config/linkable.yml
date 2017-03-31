@@ -9,4 +9,7 @@ Only:
 Link:
   extensions:
     - LinkableSiteTreeExtension
-
+    
+Page:
+  extensions:
+    - LinkableDataExtension
