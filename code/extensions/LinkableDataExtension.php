@@ -10,11 +10,9 @@ class LinkableDataExtension extends DataExtension {
         
         //loop through has_one relationships and reset any Link fields
         if($hasOne){
-            foreach(array_keys($hasOne) as $field) {
-                if($hasOne[$field] === 'Link'){
-                    $link = array_search($hasOne[$field], $hasOne);
-
-                    $this->owner->{$link.'ID'} = 0;
+            foreach ($hasOne as $field => $fieldType) {
+                if ($fieldType === 'Link') {
+                    $this->owner->{$field.'ID'} = 0;
                 }
             }
         }
