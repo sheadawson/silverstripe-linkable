@@ -69,6 +69,7 @@ Link:
     iconbutton: Description of iconbutton template # looks for  Link_iconbutton.ss template
 ```
 
+
 ### Limit allowed Link types
 
 To limit link types for each field.
@@ -84,6 +85,17 @@ Link:
   allowed_types:
     - URL
     - SiteTree
+```
+
+
+The default types available are:
+
+```YAML
+URL: URL
+Email: Email address
+Phone: Phone number
+File: File on this website
+SiteTree: Page on this website
 ```
 
 ### Adding custom Link types

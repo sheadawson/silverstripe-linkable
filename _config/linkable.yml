@@ -1,0 +1,15 @@
+---
+Name: linkable
+After:
+  - 'framework/*'
+  - 'cms/*'
+Only:
+  moduleexists: 'cms'
+---
+Link:
+  extensions:
+    - LinkableSiteTreeExtension
+    
+Page:
+  extensions:
+    - LinkableDataExtension
