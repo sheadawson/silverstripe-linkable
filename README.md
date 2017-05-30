@@ -177,3 +177,16 @@ $Video.ThumbURL
 ```
 
 See EmbeddedObject.php for a list of properties saved available in $db.
+
+### Customising EmbeddedObjectField fields
+
+You can hide the description and/or the other fields, keeping only the URL and Thumbnail.
+
+In your config.yml
+
+```YAML
+EmbeddedObjectField:
+  hide_fields: true
+  hide_description: true
+```
+
