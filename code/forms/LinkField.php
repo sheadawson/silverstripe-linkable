@@ -123,7 +123,7 @@ class LinkField extends TextField
     {
         $requestID = Controller::curr()->request->requestVar('LinkID');
 
-        if ($requestID == '0') {
+        if ($requestID == '0' && !$this->Value()) {
             return;
         }
 
