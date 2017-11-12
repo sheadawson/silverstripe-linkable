@@ -238,29 +238,29 @@ class Link extends DataObject
         $types = $this->config()->get('types');
         $i18nTypes = array();
         $allowed_types = $this->config()->get('allowed_types');
-        
+
         if ($this->allowed_types) {
             // Prioritise local field over global settings
             $allowed_types = $this->allowed_types;
         }
- 
+
         if ($allowed_types) {
            foreach ($allowed_types as $type) {
                 if (!array_key_exists($type, $types)) {
                     user_error("{$type} is not a valid link type");
                 }
             }
-        
+
             foreach (array_diff_key($types, array_flip($allowed_types)) as $key => $value) {
                 unset($types[$key]);
             }
         }
-        
+
         // Get translatable labels
         foreach ($types as $key => $label) {
             $i18nTypes[$key] = _t('Linkable.TYPE'.strtoupper($key), $label);
         }
-        
+
         return $i18nTypes;
     }
 
@@ -316,7 +316,7 @@ class Link extends DataObject
                              $LinkURL = false;
                          }
                          if ($component->hasMethod('Link')) {
-                             $LinkURL = $component->Link() . $this->Anchor;
+                             $LinkURL = $component->Link() . '#' . $this->Anchor;
                          } else {
                              $LinkURL = "Please implement a Link() method on your dataobject \"$type\"";
                          }
