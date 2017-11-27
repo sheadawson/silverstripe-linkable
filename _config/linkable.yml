@@ -2,14 +2,15 @@
 Name: linkable
 After:
   - 'framework/*'
-  - 'cms/*'
+#  - 'cms/*'
+# TODO fix this, for some reason this rule breaks the dev build task
 Only:
-  moduleexists: 'cms'
+  moduleexists: 'silverstripe/cms'
 ---
-Link:
+Sheadawson\Linkable\Models\Link:
   extensions:
-    - LinkableSiteTreeExtension
-    
+    - Sheadawson\Linkable\Extensions\LinkableSiteTreeExtension
+
 Page:
   extensions:
-    - LinkableDataExtension
+    - Sheadawson\Linkable\Extensions\LinkableDataExtension

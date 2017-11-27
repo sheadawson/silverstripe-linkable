@@ -56,6 +56,7 @@ jQuery.entwine("linkfield", function($) {
 						form.addClass('changed');
 					} else {
 						self.getDialog().html(response);
+                        jQuery('div.display-logic, div.display-logic-master').entwine().initFields();
 					}
 				}
 
@@ -77,6 +78,9 @@ jQuery.entwine("linkfield", function($) {
 			dlg.empty().dialog("open").parent().addClass("loading");
 
 			dlg.load(this.getURL(), function(){
+			    // init display logic fields
+                jQuery('div.display-logic, div.display-logic-master').entwine().initFields();
+
 				dlg.parent().removeClass("loading");
 			});
 		}
@@ -103,8 +107,9 @@ jQuery.entwine("linkfield", function($) {
 			var holder = this.parents('.field:first');
 			this.parents('.middleColumn:first').html("<img src='framework/images/network-save.gif' />");
 			holder.load(url, function() {
-				 form.addClass('changed');
-			});
+                form.addClass('changed');
+                holder.replaceWith(holder.html());
+            });
 
 			return false;
 		},
