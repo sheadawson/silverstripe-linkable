@@ -25,7 +25,7 @@
     "require": {
         "silverstripe/vendor-plugin": "^1.0",
         "silverstripe/framework": "^4@dev",
-        "unclecheese/display-logic": "^2",
+        "unclecheese/display-logic": "*",
         "embed/embed": "^3.2"
     },
     "require-dev": {
