@@ -78,9 +78,6 @@ $.entwine('ss', () => {
       const dlg = this.getDialog();
       dlg.empty().dialog('open').parent().addClass('loading');
       dlg.load(this.getURL(), () => {
-        // init display logic fields
-        // console.log($('div.display-logic, div.display-logic-master').entwine().initFields()); // notify
-        // $('div.display-logic, div.display-logic-master').entwine().initFields();
         dlg.parent().removeClass('loading');
       });
     }
