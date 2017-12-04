@@ -9,7 +9,7 @@ use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\TreeDropdownField;
 use SilverStripe\ORM\FieldType\DBHTMLText;
-use Unclecheese\DisplayLogic\Forms\DisplayLogicWrapper;
+use UncleCheese\DisplayLogic\Forms\DisplayLogicWrapper;
 use SilverStripe\Core\Convert;
 use SilverStripe\ORM\ValidationResult;
 use SilverStripe\ORM\DataObject;
