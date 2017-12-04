@@ -179,7 +179,7 @@ class Link extends DataObject
         // TODO display logic is relying on changing, thus it breaks the display login update chain
         // TODO this should be probably fixed in the LeftAndMain.js::onmatch() by adding .chosen().change( … );
         // TODO this MR should fix the issue: https://github.com/unclecheese/silverstripe-display-logic/pull/83
-        $type->addExtraClass('no-chosen');
+        // $type->addExtraClass('no-chosen');
 
         $title
             ->setTitle(_t('Linkable.TITLE', 'Title'))

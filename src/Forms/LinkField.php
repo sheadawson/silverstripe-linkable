@@ -54,7 +54,7 @@ class LinkField extends TextField
      */
     public function Field($properties = [])
     {
-        Requirements::javascript('sheadawson/silverstripe-linkable: client/dist/bundle.js');
+        Requirements::javascript('sheadawson/silverstripe-linkable: client/dist/js/bundle.js');
 
         return parent::Field();
     }
