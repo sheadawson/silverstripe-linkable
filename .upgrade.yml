@@ -1,0 +1,7 @@
+mappings:
+  LinkableDataExtension: Sheadawson\Linkable\Extensions\LinkableDataExtension
+  LinkableSiteTreeExtension: Sheadawson\Linkable\Extensions\LinkableSiteTreeExtension
+  EmbeddedObjectField: Sheadawson\Linkable\Forms\EmbeddedObjectField
+  LinkField: Sheadawson\Linkable\Extensions\Forms\LinkField
+  EmbeddedObject: Sheadawson\Linkable\Models\EmbeddedObject
+  Link: Sheadawson\Linkable\Models\Link

@@ -1,0 +1,54 @@
+div.embeddedObjectUrl {
+	max-width: 512px;
+
+	input.text {
+		max-width: 400px;
+	}
+}
+
+
+input.embeddedObjectLoad {
+	float: right;
+}
+
+.embeddedObjectProperties {
+	div.ss-upload {
+		margin-left: -185px;
+	}
+}
+
+.embedThumb {
+	padding: 10px 0px;
+
+	img{
+		max-width: 482px;
+		height: auto;
+	}
+}
+
+
+.field.embeddedobject .middleColumn{
+	background: #fff;
+	padding: 20px 20px 0;
+	border: 1px solid #eee;
+	border-radius: 10px;
+	display: inline-block;
+	margin-left: 0;
+	min-width: 482px;
+}
+
+.embeddedObjectProperties {
+	.fieldholder-small{
+		margin-bottom: 20px;
+	}
+
+	label{
+		display: block;
+	}
+
+	input{
+		display: block;
+		box-sizing: border-box;
+	}
+}
+

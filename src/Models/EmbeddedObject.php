@@ -1,15 +1,32 @@
 <?php
 
+namespace Sheadawson\Linkable\Models;
+
+use Embed\Adapters\Adapter;
+use Embed\Embed;
+use SilverStripe\ORM\DataObject;
+
 /**
- * EmbeddedObject
- *
- * @package silverstripe-linkable
+ * Class EmbeddedObject
  * @license BSD License http://www.silverstripe.org/bsd-license
  * @author <marcus@silverstripe.com.au>
- **/
+ * @property string Title
+ * @property string Type
+ * @property string SourceURL
+ * @property string Width
+ * @property string Height
+ * @property string Description
+ * @property string ThumbURL
+ * @property string ExtraClass
+ * @property string EmbedHTML
+ * @package Sheadawson\Linkable\Models
+ */
 class EmbeddedObject extends DataObject
 {
-    private static $db = array(
+    /**
+     * @var array
+     */
+    private static $db = [
         'Title' => 'Varchar(255)',
         'Type' => 'Varchar',
         'SourceURL' => 'Varchar(255)',
@@ -19,22 +36,27 @@ class EmbeddedObject extends DataObject
         'ThumbURL' => 'Varchar(255)',
         'ExtraClass' => 'Varchar(64)',
         'EmbedHTML' => 'Text',
-    );
+    ];
 
+    /**
+     * @var string
+     */
+    private static $table_name = 'LinkableEmbed';
+
+    /**
+     * @return $this
+     */
     public function Embed()
     {
-        $options = array(
-            'width' => $this->Width,
-            'height' => $this->Height,
-        );
         $this->setFromURL($this->SourceURL);
+
         return $this;
     }
 
     public function onBeforeWrite()
     {
         $changes = $this->getChangedFields();
-        
+
         if (isset($changes['SourceURL']) && $changes['SourceURL']['after']) {
             $this->updateEmbedHTML();
         }
@@ -47,27 +69,37 @@ class EmbeddedObject extends DataObject
         $this->setFromURL($this->SourceURL);
     }
 
+    /**
+     * @param $url
+     */
     public function setFromURL($url)
     {
         if ($url) {
-            $info = Embed\Embed::create($url); // , array('image' => array('minImageWidth' => $this->Width, 'minImageHeight' => $this->Height)));
+            // array('image' => array('minImageWidth' => $this->Width, 'minImageHeight' => $this->Height)));
+            $info = Embed::create($url);
             $this->setFromEmbed($info);
         }
     }
 
-    public function setFromEmbed(\Embed\Adapters\Adapter $info)
+    /**
+     * @param Adapter $info
+     */
+    public function setFromEmbed(Adapter $info)
     {
         $this->Title = $info->getTitle();
         $this->SourceURL = $info->getUrl();
         $this->Width = $info->getWidth();
         $this->Height = $info->getHeight();
         $this->ThumbURL = $info->getImage();
-        $this->Description = $info->getDescription() ? $info->getDescription(): $info->getTitle();
+        $this->Description = $info->getDescription() ? $info->getDescription() : $info->getTitle();
         $this->Type = $info->getType();
         $embed = $info->getCode();
         $this->EmbedHTML = $embed ? $embed : $this->EmbedHTML;
     }
 
+    /**
+     * @return string
+     */
     public function forTemplate()
     {
         switch ($this->Type) {
@@ -86,5 +118,7 @@ class EmbeddedObject extends DataObject
                 return "<img src='$this->SourceURL' width='$this->Width' height='$this->Height' class='$this->ExtraClass' />";
                 break;
         }
+
+        return '';
     }
 }
