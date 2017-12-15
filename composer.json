@@ -46,7 +46,7 @@
             "dev-master": "2.0.x-dev"
         },
         "expose": [
-            "client/js"
+            "client/dist"
         ]
     },
     "prefer-stable": true,
