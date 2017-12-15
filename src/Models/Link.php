@@ -9,7 +9,7 @@ use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\TreeDropdownField;
 use SilverStripe\ORM\FieldType\DBHTMLText;
-use UncleCheese\DisplayLogic\Forms\DisplayLogicWrapper;
+use UncleCheese\DisplayLogic\Forms\Wrapper;
 use SilverStripe\Core\Convert;
 use SilverStripe\ORM\ValidationResult;
 use SilverStripe\ORM\DataObject;
@@ -158,7 +158,7 @@ class Link extends DataObject
                 $this->getTypes()
             ),
             $url = TextField::create('URL', 'URL'),
-            $file = DisplayLogicWrapper::create(
+            $file = Wrapper::create(
                 TreeDropdownField::create(
                     'FileID',
                     _t('Linkable.FILE', 'File'),

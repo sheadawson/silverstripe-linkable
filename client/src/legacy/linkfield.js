@@ -1,12 +1,9 @@
 import $ from 'jquery';
 
-
-$.noConflict();
-
 window.ss = window.ss || {};
 
 
-$.entwine('ss', () => {
+$.entwine('ss', ($) => {
   $('input.link').entwine({
     Loading: null,
     Dialog: null,
