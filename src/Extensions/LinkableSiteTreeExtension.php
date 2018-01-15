@@ -6,7 +6,7 @@ use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\TreeDropdownField;
 use SilverStripe\Forms\TextField;
-use Unclecheese\DisplayLogic\Forms\DisplayLogicWrapper;
+use UncleCheese\DisplayLogic\Forms\Wrapper;
 use SilverStripe\ORM\DataExtension;
 
 /**
@@ -49,7 +49,7 @@ class LinkableSiteTreeExtension extends DataExtension
     public function updateCMSFields(FieldList $fields)
     {
         // Site tree field as a combination of tree drop down and anchor text field
-        $siteTreeField = DisplayLogicWrapper::create(
+        $siteTreeField = Wrapper::create(
             TreeDropdownField::create(
                 'SiteTreeID',
                 _t('Linkable.PAGE', 'Page'),

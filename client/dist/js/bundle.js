@@ -85,23 +85,21 @@ var _jquery2 = _interopRequireDefault(_jquery);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_jquery2.default.noConflict();
-
 window.ss = window.ss || {};
 
-_jquery2.default.entwine('ss', function () {
-  (0, _jquery2.default)('.embeddedObjectLoad').entwine({
+_jquery2.default.entwine('ss', function ($) {
+  $('.embeddedObjectLoad').entwine({
     onclick: function onclick() {
       var params = {
-        SecurityID: (0, _jquery2.default)('input[name=SecurityID]').val(),
-        URL: (0, _jquery2.default)(this).parent().find('input[type=text]').val()
+        SecurityID: $('input[name=SecurityID]').val(),
+        URL: $(this).parent().find('input[type=text]').val()
       };
-      var container = (0, _jquery2.default)(this).parents('div.embeddedobject');
+      var container = $(this).parents('div.embeddedobject');
       var button = this;
       var buttonText = button.val();
       button.val('Loading').prop('disabled', 'disabled');
 
-      _jquery2.default.post((0, _jquery2.default)(this).data('href'), params, function (data) {
+      $.post($(this).data('href'), params, function (data) {
         button.val(buttonText).removeAttr('disabled');
         if (data && data.length) {
           container.html(data);
@@ -124,12 +122,10 @@ var _jquery2 = _interopRequireDefault(_jquery);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_jquery2.default.noConflict();
-
 window.ss = window.ss || {};
 
-_jquery2.default.entwine('ss', function () {
-  (0, _jquery2.default)('input.link').entwine({
+_jquery2.default.entwine('ss', function ($) {
+  $('input.link').entwine({
     Loading: null,
     Dialog: null,
     URL: null,
@@ -157,39 +153,39 @@ _jquery2.default.entwine('ss', function () {
 
       this.getDialog().data('field', this).dialog({
         autoOpen: false,
-        width: (0, _jquery2.default)(window).width() * (80 / 100),
-        height: (0, _jquery2.default)(window).height() * (80 / 100),
+        width: $(window).width() * (80 / 100),
+        height: $(window).height() * (80 / 100),
         modal: true,
         title: this.data('dialog-title'),
         position: { my: 'center', at: 'center', of: window }
       });
 
       this.getDialog().on('click', 'button', function () {
-        (0, _jquery2.default)(this).addClass('loading ui-state-disabled');
+        $(this).addClass('loading ui-state-disabled');
       });
 
       this.getDialog().on('submit', 'form', function () {
         var options = {};
         options.success = function (response) {
-          if ((0, _jquery2.default)(response).is('.field')) {
+          if ($(response).is('.field')) {
             self.getDialog().empty().dialog('close');
             self.parents('.field:first').replaceWith(response);
             form.addClass('changed');
           } else {
             self.getDialog().html(response);
-            (0, _jquery2.default)('div.display-logic, div.display-logic-master').entwine().initFields();
+            $('div.display-logic, div.display-logic-master').entwine().initFields();
           }
         };
 
-        (0, _jquery2.default)(this).ajaxSubmit(options);
+        $(this).ajaxSubmit(options);
 
         return false;
       });
     },
     onunmatch: function onunmatch() {
       var self = this;
-      (0, _jquery2.default)('.linkfield-dialog.ui-dialog-content').filter(function () {
-        return self[0] === (0, _jquery2.default)(this).data('field')[0];
+      $('.linkfield-dialog.ui-dialog-content').filter(function () {
+        return self[0] === $(this).data('field')[0];
       }).remove();
     },
     showDialog: function showDialog() {
@@ -201,14 +197,14 @@ _jquery2.default.entwine('ss', function () {
     }
   });
 
-  (0, _jquery2.default)('.linkfield-button').entwine({
+  $('.linkfield-button').entwine({
     onclick: function onclick() {
       this.siblings('input.link').showDialog();
       return false;
     }
   });
 
-  (0, _jquery2.default)('.linkfield-remove-button').entwine({
+  $('.linkfield-remove-button').entwine({
     onclick: function onclick() {
       var form = this.parents('form');
       var formUrl = form.attr('action');
