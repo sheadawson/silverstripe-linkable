@@ -397,7 +397,7 @@ class Link extends DataObject
     {
         $class = $this->Classes ? Convert::raw2att($this->Classes) : '';
 
-        return $class ? " class='$class'" : '';
+        return $class ? " class=$class" : '';
     }
 
     /**
@@ -407,7 +407,7 @@ class Link extends DataObject
      */
     public function getTargetAttr()
     {
-        return $this->OpenInNewWindow ? " target='_blank'" : '';
+        return $this->OpenInNewWindow ? " target=_blank" : '';
     }
 
     /**
