@@ -24,7 +24,7 @@
     },
     "require": {
         "silverstripe/vendor-plugin": "^1.0",
-        "silverstripe/framework": "^4@dev",
+        "silverstripe/framework": "^4.0",
         "unclecheese/display-logic": "*",
         "embed/embed": "^3.2"
     },
