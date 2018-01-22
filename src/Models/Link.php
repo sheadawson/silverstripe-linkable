@@ -97,6 +97,11 @@ class Link extends DataObject
      */
     private static $allowed_types = null;
 
+    private static $casting = [
+        'ClassAttr' => 'HTMLFragment',
+        'TargetAttr' => 'HTMLFragment',
+    ];
+
     /**
      * List the allowed included link types.  If null all are allowed.
      * Instance specific override
@@ -397,7 +402,7 @@ class Link extends DataObject
     {
         $class = $this->Classes ? Convert::raw2att($this->Classes) : '';
 
-        return $class ? " class=$class" : '';
+        return $class ? " class='$class'" : '';
     }
 
     /**
@@ -407,7 +412,7 @@ class Link extends DataObject
      */
     public function getTargetAttr()
     {
-        return $this->OpenInNewWindow ? " target=_blank" : '';
+        return $this->OpenInNewWindow ? " target='_blank'" : '';
     }
 
     /**
