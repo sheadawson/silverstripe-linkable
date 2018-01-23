@@ -97,6 +97,11 @@ class Link extends DataObject
      */
     private static $allowed_types = null;
 
+    private static $casting = [
+        'ClassAttr' => 'HTMLFragment',
+        'TargetAttr' => 'HTMLFragment',
+    ];
+
     /**
      * List the allowed included link types.  If null all are allowed.
      * Instance specific override
