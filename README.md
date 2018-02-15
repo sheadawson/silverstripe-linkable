@@ -2,10 +2,10 @@
 
 ## Requirements
 
-* SilverStripe 3.2.x
+* SilverStripe 4.x
 * [Display Logic](https://github.com/unclecheese/silverstripe-display-logic)
 
-See 1.1 branch/releases for SilverStripe 3.1 support
+See 1.1 branch/releases for SilverStripe 4.x support
 
 ## Maintainers
 
@@ -28,13 +28,14 @@ A Link Object can be linked to a URL, Email, Phone number, an internal Page or F
 ### Example usage
 
 ```php
-class Page extends SiteTree {
+class Page extends SiteTree
+{
+	private static $has_one = [
+		'ExampleLink' => 'Link',
+	];
 
-	private static $has_one = array(
-		'ExampleLink' => 'Link'
-	);
-
-	public function getCMSFields(){
+	public function getCMSFields()
+	{
 		$fields = parent::getCMSFields();
 
 		$fields->addFieldToTab('Root.Link', LinkField::create('ExampleLinkID', 'Link to page or file'));
@@ -63,7 +64,7 @@ $ExampleLink.renderWith(Link_button)
 Finally, you can optionally offer CMS users the ability to select from a list of templates, allowing them to choose how their Link should be rendered. To enable this feature, create your custom template files and register them in your site config.yml file as below.
 
 ```YAML
-Link:
+Sheadawson\Linkable\Models\Link:
   templates:
     button: Description of button template # looks for Link_button.ss template
     iconbutton: Description of iconbutton template # looks for  Link_iconbutton.ss template
@@ -81,7 +82,7 @@ LinkField::create('ExampleLinkID', 'Link Title')->setAllowedTypes(array('URL','P
 You can also globally limit link types.  To limit types define them in your site config.yml file as below.
 
 ```YAML
-Link:
+Sheadawson\Linkable\Models\Link:
   allowed_types:
     - URL
     - SiteTree
@@ -105,13 +106,13 @@ Sometimes you might have custom DataObject types that you would like CMS users t
 ```php
 class CustomLink extends DataExtension
 {
-    private static $has_one = array(
-        'Product' => 'Product'
-    );
+    private static $has_one = [
+        'Product' => 'Product',
+    ];
 
-    private static $types = array(
-        'Product' => 'A Product on this site'
-    );
+    private static $types = [
+        'Product' => 'A Product on this site',
+    ];
 
     public function updateCMSFields(FieldList $fields)
     {
@@ -131,7 +132,7 @@ class CustomLink extends DataExtension
 In your config.yml
 
 ```YAML
-Link:
+Sheadawson\Linkable\Models\Link:
   extensions:
     - CustomLink
 ```
@@ -145,13 +146,14 @@ Use the EmbeddedObject/Field to easily add oEmbed content to a DataObject or Pag
 ### Example usage
 
 ```php
-class Page extends SiteTree {
+class Page extends SiteTre
+ {
+	private static $has_one = [
+		'Video' => 'EmbeddedObject',
+	];
 
-	private static $has_one = array(
-		'Video' => 'EmbeddedObject'
-	);
-
-	public function getCMSFields(){
+	public function getCMSFields()
+	{
 		$fields = parent::getCMSFields();
 
 		$fields->addFieldToTab('Root.Video', EmbeddedObjectField::create('Video', 'Video from oEmbed URL', $this->Video()));
@@ -177,3 +179,25 @@ $Video.ThumbURL
 ```
 
 See EmbeddedObject.php for a list of properties saved available in $db.
+
+## Custom query params
+
+Sometimes you may want to add custom query params to the GET request which fetches the `LinkEditForm`.
+This is very useful in a situation where you want to customise the form based on specific situation.
+Custom query params are a way how to provide context for your `LinkEditForm`.
+
+To add custom params you need to add `data-extra-query`.
+
+```
+$linkField->setAttribute('data-extra-query', '&param1=value1');
+```
+
+You can then use the `updateLinkForm` extension point and extract the param value with following code:
+
+```
+$param1 = Controller::curr()->getRequest()->requestVar('param1');
+```
+
+## Development
+
+Front end uses pre-processing and requires the use of `Yarn`.
