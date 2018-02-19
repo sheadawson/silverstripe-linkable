@@ -94,6 +94,7 @@ class Link extends DataObject
      * global config
      *
      * @var array
+     * @config
      */
     private static $allowed_types = null;
 
@@ -179,12 +180,6 @@ class Link extends DataObject
                 _t('Linkable.OPENINNEWWINDOW', 'Open link in a new window')
             ),
         ]);
-
-        // TODO this is a workaround, the issue is that chosen doesn't update the select element that
-        // TODO display logic is relying on changing, thus it breaks the display login update chain
-        // TODO this should be probably fixed in the LeftAndMain.js::onmatch() by adding .chosen().change( … );
-        // TODO this MR should fix the issue: https://github.com/unclecheese/silverstripe-display-logic/pull/83
-        // $type->addExtraClass('no-chosen');
 
         $title
             ->setTitle(_t('Linkable.TITLE', 'Title'))

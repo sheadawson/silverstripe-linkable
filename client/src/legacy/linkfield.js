@@ -28,6 +28,12 @@ $.entwine('ss', ($) => {
         url = `${url}&${formUrlParts[1]}`;
       }
 
+      // add extra query params if provided
+      const extraQuery = self.data('extra-query');
+      if (typeof extraQuery !== 'undefined') {
+          url = `${url}${extraQuery}`;
+      }
+
       this.setURL(url);
 
       // configure the dialog
@@ -55,7 +61,6 @@ $.entwine('ss', ($) => {
             form.addClass('changed');
           } else {
             self.getDialog().html(response);
-            $('div.display-logic, div.display-logic-master').entwine().initFields();
           }
         };
 

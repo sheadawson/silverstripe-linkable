@@ -149,6 +149,11 @@ _jquery2.default.entwine('ss', function ($) {
         url = url + '&' + formUrlParts[1];
       }
 
+      var extraQuery = self.data('extra-query');
+      if (typeof extraQuery !== 'undefined') {
+        url = '' + url + extraQuery;
+      }
+
       this.setURL(url);
 
       this.getDialog().data('field', this).dialog({
@@ -173,7 +178,6 @@ _jquery2.default.entwine('ss', function ($) {
             form.addClass('changed');
           } else {
             self.getDialog().html(response);
-            $('div.display-logic, div.display-logic-master').entwine().initFields();
           }
         };
 
