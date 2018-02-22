@@ -5,7 +5,7 @@
 * SilverStripe 4.x
 * [Display Logic](https://github.com/unclecheese/silverstripe-display-logic)
 
-See 1.1 branch/releases for SilverStripe 4.x support
+See 1.1 branch/releases for SilverStripe 3.x support
 
 ## Maintainers
 
