@@ -51,6 +51,14 @@ In your template, you can render the links anchor tag with
 $ExampleLink
 ```
 
+### Adding custom class to link
+
+The anchor tag can be rendered with a class or classes of your choosing by passing the class string to the `setCSSClass()` method within your template.
+
+```html
+$ExampleLink.setCSSClass(your-css-class)
+```
+
 ### Customising link templates
 
 Link tags are rendered with the Link.ss template. You can override this template by copying it into your theme or project folder and modifying as required.
