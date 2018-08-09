@@ -215,3 +215,9 @@ $param1 = Controller::curr()->getRequest()->requestVar('param1');
 ## Development
 
 Front end uses pre-processing and requires the use of `Yarn`.
+
+## Migration
+
+To handle existing database migration from SilverStripe 3.x, two steps to run.
+1. Run dev task `dev/tasks/Sheadawson-Linkable-Models-MigrateDatabaseTables` to rename the linkable related database tables.
+2. Run dev build to reassign the ClassName values for DataObject records.
