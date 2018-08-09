@@ -1,0 +1,7 @@
+---
+Name: linkablelegacy
+---
+SilverStripe\ORM\DatabaseAdmin:
+  classname_value_remapping:
+    EmbeddedObject: Sheadawson\Linkable\Models\EmbeddedObject
+    Link: Sheadawson\Linkable\Models\Link
