@@ -19,12 +19,21 @@ class MigrateDatabaseTables extends BuildTask
 
     protected $description = 'Rename dataobject tables for SilverStripe 4 upgrade. The existing database "LinkableEmbed" and "LinkableLink" will be removed.';
 
+    private $renameTables = [
+        'EmbeddedObject' => 'LinkableEmbed',
+        'Link' => 'LinkableLink',
+    ];
+
     public function run($request)
     {
-        DB::query('DROP TABLE IF EXISTS LinkableEmbed, LinkableLink;');
-        DB::query('RENAME TABLE EmbeddedObject TO LinkableEmbed;');
-        DB::alteration_message('Renamed database table "EmbeddedObject" to "LinkableEmbed".');
-        DB::query('RENAME TABLE Link TO LinkableLink;');
-        DB::alteration_message('Renamed database table "Link" to "LinkableLink".');
+        foreach ($this->renameTables as $old => $new) {
+            if(!DB::query("SHOW TABLES LIKE '$old';")->value()) {
+                DB::alteration_message("There is no old table \"$old\" exists.");
+            } else {
+                DB::query("DROP TABLE IF EXISTS $new;");
+                DB::query("RENAME TABLE $old TO $new;");
+                DB::alteration_message("Renamed database table \"$old\" to \"$new\".");
+            }
+        }
     }
 }
