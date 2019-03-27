@@ -2,7 +2,6 @@
 
 namespace Sheadawson\Linkable\Task;
 
-use SilverStripe\Security\RandomGenerator;
 use SilverStripe\Dev\BuildTask;
 use SilverStripe\ORM\DB;
 
