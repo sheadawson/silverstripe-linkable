@@ -10,3 +10,9 @@ Sheadawson\Linkable\Models\Link:
 Page:
   extensions:
     - Sheadawson\Linkable\Extensions\LinkableDataExtension
+
+SilverStripe\Admin\LeftAndMain:
+  extra_requirements_javascript:
+    - 'sheadawson/silverstripe-linkable:client/dist/js/bundle.js'
+  extra_requirements_css:
+    - 'sheadawson/silverstripe-linkable:client/dist/styles/bundle.css'
