@@ -2,6 +2,15 @@ import $ from 'jquery';
 
 window.ss = window.ss || {};
 
+function urlForInline(field_action) {
+  const inline_form = $('.form.element-editor-editform__form');
+  if (inline_form.length > 0) {
+    let base_action = inline_form.attr('action');
+    let input_name = $('input.link').attr('name');
+    return encodeURI(`${base_action}/field/${input_name}/${field_action}`);
+  }
+  return url;
+}
 
 $.entwine('ss', ($) => {
   $('input.link').entwine({
@@ -18,6 +27,9 @@ $.entwine('ss', ($) => {
       let url = `${encodeURI(formUrl)}/field/${this.attr('name')}/LinkFormHTML`;
       formUrl = formUrlParts[0];
 
+      // override url if inline
+      url = urlForInline('LinkFormHTML');
+
       if (self.val().length) {
         url = `${url}?LinkID=${self.val()}`;
       } else {
@@ -31,7 +43,7 @@ $.entwine('ss', ($) => {
       // add extra query params if provided
       const extraQuery = self.data('extra-query');
       if (typeof extraQuery !== 'undefined') {
-          url = `${url}${extraQuery}`;
+        url = `${url}${extraQuery}`;
       }
 
       this.setURL(url);
@@ -98,6 +110,9 @@ $.entwine('ss', ($) => {
       let formUrl = form.attr('action');
       const formUrlParts = formUrl.split('?');
       let url = `${encodeURI(formUrl)}/field/${this.siblings('input:first').prop('name')}/doRemoveLink`;
+
+      // override url if inline
+      url = urlForInline('doRemoveLink');
 
       formUrl = formUrlParts[0];
 
