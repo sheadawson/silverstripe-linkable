@@ -2,14 +2,30 @@ import $ from 'jquery';
 
 window.ss = window.ss || {};
 
-function urlForInline(field_action) {
-  const inline_form = $('.form.element-editor-editform__form');
+function urlForInline(self, url, field_action) {
+  const inline_form = self.closest('.form.element-editor-editform__form');
   if (inline_form.length > 0) {
     let base_action = inline_form.attr('action');
-    let input_name = $('input.link').attr('name');
-    return encodeURI(`${base_action}/field/${input_name}/${field_action}`);
+    let link_name = inline_form.find('input.link').attr('name');
+    return encodeURI(`${base_action}/field/${link_name}/${field_action}`);
   }
   return url;
+}
+
+function updateElements(self) {
+  const inline_form = self.closest('.form.element-editor-editform__form');
+  if (inline_form.length > 0) {
+    const form_name = inline_form.attr('id').replace('Form_', '');
+    const link_input = inline_form.find('input.link');
+    const link_name = link_input.attr('name');
+    const link_value = link_input.val();
+    const elements = $('input[name=Elements].no-change-track');
+
+    let data = JSON.parse(elements.val());
+    data[form_name][link_name] = link_value == '' ? '0' : link_value;
+    let newval = JSON.stringify(data);
+    elements.val(newval);
+  }
 }
 
 $.entwine('ss', ($) => {
@@ -28,7 +44,7 @@ $.entwine('ss', ($) => {
       formUrl = formUrlParts[0];
 
       // override url if inline
-      url = urlForInline('LinkFormHTML');
+      url = urlForInline(this, url, 'LinkFormHTML');
 
       if (self.val().length) {
         url = `${url}?LinkID=${self.val()}`;
@@ -47,6 +63,9 @@ $.entwine('ss', ($) => {
       }
 
       this.setURL(url);
+
+      // update data for inline editing
+      updateElements(this);
 
       // configure the dialog
       this.getDialog().data('field', this).dialog({
@@ -112,7 +131,7 @@ $.entwine('ss', ($) => {
       let url = `${encodeURI(formUrl)}/field/${this.siblings('input:first').prop('name')}/doRemoveLink`;
 
       // override url if inline
-      url = urlForInline('doRemoveLink');
+      url = urlForInline(this, url, 'doRemoveLink');
 
       formUrl = formUrlParts[0];
 
