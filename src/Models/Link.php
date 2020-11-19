@@ -67,7 +67,17 @@ class Link extends DataObject
         'LinkType',
         'LinkURL',
     ];
-
+    
+    /**
+     * @var array
+     */    
+    private static $searchable_fields = [
+        'Title' => 'PartialMatchFilter',
+        'URL' => 'PartialMatchFilter',
+        'Phone' => 'PartialMatchFilter',
+        'Email' => 'PartialMatchFilter',   
+    ];
+    
     /**
      * A map of templates that are available for rendering
      * Link objects with
