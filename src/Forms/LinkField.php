@@ -13,6 +13,7 @@ use SilverStripe\Forms\HiddenField;
 use SilverStripe\ORM\ValidationException;
 use SilverStripe\Control\Controller;
 use SilverStripe\Forms\TextField;
+use SilverStripe\Forms\FormField;
 
 /**
  * Class LinkField
@@ -47,6 +48,12 @@ class LinkField extends TextField
      * @var array
      */
     protected $allowed_types = null;
+
+    /**
+     * Schema config
+     */
+    protected $schemaDataType = FormField::SCHEMA_DATA_TYPE_CUSTOM;
+    protected $schemaComponent = 'LinkField';
 
     /**
      * @param array $properties
@@ -212,5 +219,23 @@ class LinkField extends TextField
     public function getAllowedTypes()
     {
         return $this->allowed_types;
+    }
+
+    /**
+     * Add some extra props for the React component to work with
+     *
+     * {@inheritDoc}
+     */
+    public function getSchemaDataDefaults()
+    {
+        $link = $this->getLinkObject();
+
+        $schema = parent::getSchemaDataDefaults();
+        $schema = array_merge($schema, [
+            'label' => $link ? $link->Title : '',
+            'url' => $link ? $link->getLinkURL() : '',
+        ]);
+
+        return $schema;
     }
 }

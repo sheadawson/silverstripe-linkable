@@ -2,6 +2,37 @@ import $ from 'jquery';
 
 window.ss = window.ss || {};
 
+function urlForInline(self, url, field_action) {
+  const inline_form = self.closest('.form.element-editor-editform__form');
+  if (inline_form.length > 0) {
+    let base_action = inline_form.attr('action');
+    let link_name = self.siblings('input.link').attr('name');
+    if (!link_name) {
+      link_name = self.closest('input.link').attr('name');
+    }
+    return encodeURI(`${base_action}/field/${link_name}/${field_action}`);
+  }
+  return url;
+}
+
+function updateElements(self) {
+  const inline_form = self.closest('.form.element-editor-editform__form');
+  if (inline_form.length > 0) {
+    let link_input = self.siblings('input.link');
+    if (link_input.length == 0) {
+      link_input = self.closest('input.link');
+    }
+    const link_value = link_input.val();
+    const link_name = link_input.attr('name');
+    const form_name = inline_form.attr('id').replace('Form_', '');
+    const elements = $('input[type=hidden][value*="ElementForm"].no-change-track');
+
+    let data = JSON.parse(elements.val());
+    data[form_name][link_name] = link_value == '' ? '0' : link_value;
+    let newval = JSON.stringify(data);
+    elements.val(newval);
+  }
+}
 
 $.entwine('ss', ($) => {
   $('input.link').entwine({
@@ -18,6 +49,9 @@ $.entwine('ss', ($) => {
       let url = `${encodeURI(formUrl)}/field/${this.attr('name')}/LinkFormHTML`;
       formUrl = formUrlParts[0];
 
+      // override url if inline
+      url = urlForInline(this, url, 'LinkFormHTML');
+
       if (self.val().length) {
         url = `${url}?LinkID=${self.val()}`;
       } else {
@@ -31,10 +65,13 @@ $.entwine('ss', ($) => {
       // add extra query params if provided
       const extraQuery = self.data('extra-query');
       if (typeof extraQuery !== 'undefined') {
-          url = `${url}${extraQuery}`;
+        url = `${url}${extraQuery}`;
       }
 
       this.setURL(url);
+
+      // update data for inline editing
+      updateElements(this);
 
       // configure the dialog
       this.getDialog().data('field', this).dialog({
@@ -98,6 +135,9 @@ $.entwine('ss', ($) => {
       let formUrl = form.attr('action');
       const formUrlParts = formUrl.split('?');
       let url = `${encodeURI(formUrl)}/field/${this.siblings('input:first').prop('name')}/doRemoveLink`;
+
+      // override url if inline
+      url = urlForInline(this, url, 'doRemoveLink');
 
       formUrl = formUrlParts[0];
 
