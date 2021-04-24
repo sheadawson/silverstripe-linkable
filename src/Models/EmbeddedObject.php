@@ -4,6 +4,9 @@ namespace Sheadawson\Linkable\Models;
 
 use Embed\Adapters\Adapter;
 use Embed\Embed;
+use Psr\Log\LoggerInterface;
+use SilverStripe\Core\Convert;
+use SilverStripe\Core\Injector\Injector;
 use SilverStripe\ORM\DataObject;
 
 /**
@@ -71,13 +74,24 @@ class EmbeddedObject extends DataObject
 
     /**
      * @param $url
+     * @return void
      */
     public function setFromURL($url)
     {
         if ($url) {
-            // array('image' => array('minImageWidth' => $this->Width, 'minImageHeight' => $this->Height)));
-            $info = Embed::create($url);
-            $this->setFromEmbed($info);
+            try {
+                // array('image' => array('minImageWidth' => $this->Width, 'minImageHeight' => $this->Height)));
+                $info = Embed::create($url);
+                $this->setFromEmbed($info);
+            } catch (Exception $e) {
+                Injector::inst()->get(LoggerInterface::class)->warning(sprintf(
+                    'Couldn\'t retrieve embed from URL "%s", exception code %s, message "%s", trace "%s"',
+                    Convert::raw2xml($url),
+                    $e->getCode(),
+                    $e->getMessage(),
+                    str_replace("\n", ", ", $e->getTraceAsString())
+                ));
+            }
         }
     }
 

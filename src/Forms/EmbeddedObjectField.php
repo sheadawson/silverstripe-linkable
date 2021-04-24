@@ -3,7 +3,10 @@
 namespace Sheadawson\Linkable\Forms;
 
 use Embed\Embed;
+use Exception;
+use Psr\Log\LoggerInterface;
 use Sheadawson\Linkable\Models\EmbeddedObject;
+use SilverStripe\Core\Injector\Injector;
 use SilverStripe\ORM\FieldType\DBHTMLText;
 use SilverStripe\View\Requirements;
 use SilverStripe\Forms\TextField;
@@ -190,8 +193,21 @@ class EmbeddedObjectField extends FormField
         }
 
         $url = $request->postVar('URL');
+
         if (strlen($url)) {
-            $info = Embed::create($url);
+            try {
+                $info = Embed::create($url);
+            } catch (Exception $e) {
+                $info = null;
+
+                Injector::inst()->get(LoggerInterface::class)->warning(sprintf(
+                    'Couldn\'t retrieve embed from URL "%s", exception code %s, message "%s", trace "%s"',
+                    Convert::raw2xml($url),
+                    $e->getCode(),
+                    $e->getMessage(),
+                    str_replace("\n", ", ", $e->getTraceAsString())
+                ));
+            }
 
             if ($info) {
                 $object = EmbeddedObject::create();
