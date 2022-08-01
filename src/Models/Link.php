@@ -67,17 +67,17 @@ class Link extends DataObject
         'LinkType',
         'LinkURL',
     ];
-    
+
     /**
      * @var array
-     */    
+     */
     private static $searchable_fields = [
         'Title' => 'PartialMatchFilter',
         'URL' => 'PartialMatchFilter',
         'Phone' => 'PartialMatchFilter',
-        'Email' => 'PartialMatchFilter',   
+        'Email' => 'PartialMatchFilter',
     ];
-    
+
     /**
      * A map of templates that are available for rendering
      * Link objects with
@@ -145,13 +145,16 @@ class Link extends DataObject
 
         // remove default fields
         $dbFields = $this->config()->get('db');
+
         if (!empty($dbFields) && is_array($dbFields)) {
             $fields->removeByName(array_keys($dbFields));
         }
 
         $templates = $this->config()->get('templates');
+
         if ($templates) {
             $i18nTemplates = [];
+
             foreach ($templates as $key => $label) {
                 $i18nTemplates[$key] = _t('Linkable.STYLE' . strtoupper($key), $label);
             }
@@ -232,20 +235,24 @@ class Link extends DataObject
     public function onAfterWrite()
     {
         parent::onAfterWrite();
+
         if (!$this->Title) {
             switch ($this->Type) {
                 case 'URL':
                 case 'Email':
                 case 'Phone':
                     $this->Title = $this->{$this->Type};
+
                     break;
                 case 'SiteTree':
                     $this->Title = $this->SiteTree()->MenuTitle;
+
                     break;
                 default:
                     if ($this->Type && $component = $this->getComponent($this->Type)) {
                         $this->Title = $component->Title;
                     }
+
                     break;
             }
 
@@ -352,15 +359,19 @@ class Link extends DataObject
         }
 
         $type = $this->Type;
+
         switch ($type) {
             case 'URL':
                 $LinkURL = $this->URL;
+
                 break;
             case 'Email':
                 $LinkURL = $this->Email ? "mailto:$this->Email" : null;
+
                 break;
             case 'Phone':
                 $LinkURL = $this->Phone ? "tel:$this->Phone" : null;
+
                 break;
             default:
                 if ($this->getTypeHasDbField()) {
@@ -376,6 +387,7 @@ class Link extends DataObject
                         }
                     }
                 }
+
                 break;
         }
 
@@ -391,7 +403,7 @@ class Link extends DataObject
      */
     public function getClasses()
     {
-        $classes = explode(' ', $this->cssClass);
+        $classes = explode(' ', $this->cssClass ?? '');
         $this->extend('updateClasses', $classes);
         $classes = implode(' ', $classes);
 
@@ -468,6 +480,7 @@ class Link extends DataObject
                         "You must enter a $type for a link type of \"$this->LinkType\""
                     );
                 }
+
                 break;
             default:
                 if ($this->getTypeHasDbField()) {
@@ -503,6 +516,7 @@ class Link extends DataObject
                             'Please enter a valid URL. Be sure to include http:// for an external URL. Or begin your internal url/anchor with a "/" character'
                         );
                     }
+
                     break;
                 case 'Email':
                     if (!filter_var($this->Email, FILTER_VALIDATE_EMAIL)) {
@@ -512,6 +526,7 @@ class Link extends DataObject
                             'Please enter a valid Email address'
                         );
                     }
+
                     break;
                 case 'Phone':
                     if (!preg_match("/^\+?[0-9]{1,5}[- ]{0,1}[0-9]{3,4}[- ]{0,1}[0-9]{4}$/", $this->Phone)) {
@@ -521,11 +536,13 @@ class Link extends DataObject
                             'Please enter a valid Phone number'
                         );
                     }
+
                     break;
             }
         }
 
         $result = ValidationResult::create();
+
         if (!$valid) {
             $result->addError($message);
         }

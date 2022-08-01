@@ -159,6 +159,7 @@ class LinkField extends TextField
 
         if (!$this->linkObject) {
             $id = $this->Value() ? $this->Value() : $requestID;
+
             if ((int)$id) {
                 $this->linkObject = Link::get()->byID($id);
             }
@@ -203,6 +204,7 @@ class LinkField extends TextField
     public function setAllowedTypes($types = [])
     {
         $this->allowed_types = $types;
+
         return $this;
     }
 
