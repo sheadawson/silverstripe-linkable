@@ -89,10 +89,10 @@ class EmbeddedObject extends DataObject
     public function setFromEmbed($info)
     {
         $this->Title = $info->title;
-        $this->SourceURL = $info->url;
+        $this->SourceURL = $info->url->__toString();
         $this->Width = $info->code->width;
         $this->Height = $info->code->height;
-        $this->ThumbURL = $info->image;
+        $this->ThumbURL = $info->image->__toString();
         $this->Description = $info->description ? $info->description : $info->Title;
         $this->Type = $info->providerName;
         $embed = $info->code->html;
