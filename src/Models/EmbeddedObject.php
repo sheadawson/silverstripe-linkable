@@ -94,7 +94,7 @@ class EmbeddedObject extends DataObject
         $this->Height = $info->code->height;
         $this->ThumbURL = $info->image->__toString();
         $this->Description = $info->description ? $info->description : $info->Title;
-        $this->Type = $info->providerName;
+        $this->Type = $info->getOEmbed()->get('type');
         $embed = $info->code->html;
         $this->EmbedHTML = $embed ? $embed : $this->EmbedHTML;
     }
