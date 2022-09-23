@@ -3,16 +3,16 @@
 namespace Sheadawson\Linkable\Models;
 
 use SilverStripe\Assets\File;
-use SilverStripe\Forms\DropdownField;
+use SilverStripe\Core\Convert;
 use SilverStripe\Forms\CheckboxField;
+use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\TreeDropdownField;
-use SilverStripe\ORM\FieldType\DBHTMLText;
-use UncleCheese\DisplayLogic\Forms\Wrapper;
-use SilverStripe\Core\Convert;
-use SilverStripe\ORM\ValidationResult;
 use SilverStripe\ORM\DataObject;
+use SilverStripe\ORM\FieldType\DBHTMLText;
+use SilverStripe\ORM\ValidationResult;
+use UncleCheese\DisplayLogic\Forms\Wrapper;
 
 /**
  * Class Link
@@ -529,7 +529,7 @@ class Link extends DataObject
 
                     break;
                 case 'Phone':
-                    if (!preg_match("/^\+?[0-9]{1,5}[- ]{0,1}[0-9]{3,4}[- ]{0,1}[0-9]{4}$/", $this->Phone)) {
+                    if (!preg_match("/^([0-9]{3}|\+?[0-9]{1,5}[- ]{0,1}[0-9]{3,4}[- ]{0,1}[0-9]{4})$/", $this->Phone)) {
                         $valid = false;
                         $message = _t(
                             'Linkable.VALIDATIONERROR_VALIDPHONE',
