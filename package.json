@@ -1,7 +1,7 @@
 {
-  "name": "display-logic",
-  "version": "4.0.0",
-  "description": "Display logic module for interface",
+  "name": "silverstripe-linkable",
+  "version": "2.0.0",
+  "description": "Manage adding links to websites and media in Silverstripe",
   "directories": {
   },
   "bin": {
@@ -20,7 +20,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/unclecheese/silverstripe-display-logic.git"
+    "url": "git@github.com:sheadawson/silverstripe-linkable.git"
   },
   "keywords": [
     "silverstripe",
@@ -29,9 +29,9 @@
   "author": "Uncle Cheese",
   "license": "BSD-3-Clause",
   "bugs": {
-    "url": "https://github.com/unclecheese/silverstripe-display-logic/issues"
+    "url": "https://github.com/sheadawson/silverstripe-linkable/issues"
   },
-  "homepage": "https://github.com/unclecheese/silverstripe-display-logic",
+  "homepage": "https://github.com/sheadawson/silverstripe-linkable/",
   "dependencies": {
     "apollo-client": "^0.5.5",
     "babel-polyfill": "^6.26.0",
