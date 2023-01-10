@@ -26,7 +26,7 @@
         "silverstripe/vendor-plugin": "^1.0",
         "silverstripe/framework": "^4.0",
         "unclecheese/display-logic": "*",
-        "embed/embed": "^3.0"
+        "embed/embed": "^4.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.7"

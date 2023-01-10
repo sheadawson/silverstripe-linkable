@@ -94,7 +94,7 @@ class EmbeddedObjectField extends FormField
             $properties['SourceURL'] = TextField::create($this->getName() . '[sourceurl]', '')
                 ->setAttribute('placeholder', _t('Linkable.SOURCEURL', 'Source URL'));
 
-            if (strlen($this->object->SourceURL)) {
+            if (strlen($this->object->SourceURL ?? '')) {
                 $properties['ObjectTitle'] = TextField::create(
                     $this->getName() . '[title]', _t('Linkable.TITLE', 'Title')
                 );
@@ -156,7 +156,7 @@ class EmbeddedObjectField extends FormField
         $val = $this->Value();
         $field = $this->getName() . 'ID';
 
-        if (!strlen($val['sourceurl']) && $this->object) {
+        if (!strlen($val['sourceurl'] ?? '') && $this->object) {
             if ($this->object->exists()) {
                 $this->object->delete();
             }
@@ -171,6 +171,7 @@ class EmbeddedObjectField extends FormField
         }
 
         $props = array_keys(Config::inst()->get(EmbeddedObject::class, 'db'));
+
         foreach ($props as $prop) {
             $this->object->$prop = isset($val[strtolower($prop)]) ? $val[strtolower($prop)] : null;
         }
@@ -189,9 +190,11 @@ class EmbeddedObjectField extends FormField
             return '';
         }
 
-        $url = $request->postVar('URL');
+        $url = $request->postVar('URL') ?? '';
+
         if (strlen($url)) {
-            $info = Embed::create($url);
+            $embed = new Embed();
+            $info = $embed->get($url);
 
             if ($info) {
                 $object = EmbeddedObject::create();
