@@ -23,7 +23,6 @@
         "issues": "http://github.com/sheadawson/silverstripe-linkable/issues"
     },
     "require": {
-        "silverstripe/vendor-plugin": "^1.0",
         "silverstripe/framework": "^4.0 || ^5.0",
         "unclecheese/display-logic": "*",
         "embed/embed": "^4.0"
